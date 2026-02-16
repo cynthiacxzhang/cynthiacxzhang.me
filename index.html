@@ -160,19 +160,7 @@
   </div>
 </footer>
 
-<script>
-document.getElementById('contactForm').addEventListener('submit', function(e) {
-  e.preventDefault();
-  const name = document.getElementById('name').value;
-  const email = document.getElementById('email').value;
-  const message = document.getElementById('message').value;
-  const subject = encodeURIComponent('Hello from ' + name);
-  const body = encodeURIComponent('From: ' + name + ' (' + email + ')\n\n' + message);
-  window.location.href = 'mailto:hello@cynthia.dev?subject=' + subject + '&body=' + body;
-  document.getElementById('formStatus').textContent = 'Opening your email client...';
-  this.reset();
-});
-</script>
+<script src="main.js"></script>
 
 </body>
 </html>
