@@ -238,7 +238,7 @@ const ContactForm = (() => {
       const subject = encodeURIComponent('Hello from ' + name);
       const body = encodeURIComponent('From: ' + name + ' (' + email + ')\n\n' + message);
 
-      window.location.href = 'mailto:hello@cynthia.dev?subject=' + subject + '&body=' + body;
+      window.location.href = 'mailto:cczhang@uwaterloo.ca?subject=' + subject + '&body=' + body;
 
       const status = document.getElementById('formStatus');
       if (status) status.textContent = 'Opening your email client...';
