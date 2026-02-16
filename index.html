@@ -33,6 +33,38 @@
   </div>
 </header>
 
+<section id="about">
+  <div class="container">
+    <p class="section-label">about me</p>
+    <div class="trivia">
+      <div class="trivia-item">
+        <span class="trivia-key">location</span>
+        <span class="trivia-val">Waterloo, ON</span>
+      </div>
+      <div class="trivia-item">
+        <span class="trivia-key">school</span>
+        <span class="trivia-val">University of Waterloo</span>
+      </div>
+      <div class="trivia-item">
+        <span class="trivia-key">editor</span>
+        <span class="trivia-val">VS Code</span>
+      </div>
+      <div class="trivia-item">
+        <span class="trivia-key">os</span>
+        <span class="trivia-val">macOS</span>
+      </div>
+      <div class="trivia-item">
+        <span class="trivia-key">coffee_or_tea</span>
+        <span class="trivia-val">coffee</span>
+      </div>
+      <div class="trivia-item">
+        <span class="trivia-key">fun_fact</span>
+        <span class="trivia-val">I debug best at 2am</span>
+      </div>
+    </div>
+  </div>
+</section>
+
 <section id="skills">
   <div class="container">
     <p class="section-label">skills</p>
@@ -102,6 +134,23 @@
       <li><span class="label">github</span> <a href="#">github.com/cynthia</a></li>
       <li><span class="label">linkedin</span> <a href="#">linkedin.com/in/cynthia</a></li>
     </ul>
+
+    <form class="contact-form" id="contactForm">
+      <div class="form-row">
+        <label for="name">name</label>
+        <input type="text" id="name" name="name" placeholder="Jane Doe" required>
+      </div>
+      <div class="form-row">
+        <label for="email">email</label>
+        <input type="email" id="email" name="email" placeholder="jane@example.com" required>
+      </div>
+      <div class="form-row">
+        <label for="message">message</label>
+        <textarea id="message" name="message" rows="4" placeholder="Say hello..." required></textarea>
+      </div>
+      <button type="submit">$ send_message</button>
+      <p class="form-status" id="formStatus"></p>
+    </form>
   </div>
 </section>
 
@@ -110,6 +159,20 @@
     <span>&lt;/&gt;</span> built with plain html &amp; css
   </div>
 </footer>
+
+<script>
+document.getElementById('contactForm').addEventListener('submit', function(e) {
+  e.preventDefault();
+  const name = document.getElementById('name').value;
+  const email = document.getElementById('email').value;
+  const message = document.getElementById('message').value;
+  const subject = encodeURIComponent('Hello from ' + name);
+  const body = encodeURIComponent('From: ' + name + ' (' + email + ')\n\n' + message);
+  window.location.href = 'mailto:hello@cynthia.dev?subject=' + subject + '&body=' + body;
+  document.getElementById('formStatus').textContent = 'Opening your email client...';
+  this.reset();
+});
+</script>
 
 </body>
 </html>
