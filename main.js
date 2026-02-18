@@ -114,7 +114,7 @@ const TriviaInteraction = (() => {
 const CommandPalette = (() => {
   const COMMANDS = {
     help: () => 'Available commands: help, about, skills, contact, clear, theme',
-    about: () => 'Cynthia — ML Software Engineer @ UWaterloo',
+    about: () => 'Cynthia — ML Research Engineer @ UWaterloo',
     skills: () => 'Python, C++, SQL | PyTorch, TensorFlow, HF | Docker, AWS, Git, Linux',
     contact: () => { scrollToSection('contact'); return 'Scrolling to contact...'; },
     clear: () => { closePalette(); return ''; },
