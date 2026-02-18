@@ -126,11 +126,27 @@ nav ul a.active {
 .hero .currently-exploring {
   color: var(--accent);
   font-size: 13px;
-  margin-bottom: 20px;
+  margin-bottom: 6px;
 }
 
 .hero .currently-exploring::before {
   content: "# ";
+  color: var(--accent-dim);
+}
+
+.exploring-list {
+  list-style: none;
+  margin-bottom: 20px;
+}
+
+.exploring-list li {
+  color: var(--accent);
+  font-size: 13px;
+  padding: 1px 0;
+}
+
+.exploring-list li::before {
+  content: "· ";
   color: var(--accent-dim);
 }
 
