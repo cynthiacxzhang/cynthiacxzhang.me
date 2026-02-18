@@ -437,7 +437,7 @@ const Blog = (() => {
       container.innerHTML = posts.map(p => `
         <div class="blog-card">
           <div class="blog-card-header">
-            <a href="blog.html?post=${encodeURIComponent(p.slug)}" class="blog-title">${p.title}</a>
+            <a href="about.html?post=${encodeURIComponent(p.slug)}" class="blog-title">${p.title}</a>
             <span class="date">${formatDate(p.date)}</span>
           </div>
           ${tagsHtml(p.tags)}
@@ -465,7 +465,7 @@ const Blog = (() => {
       const md = window.marked ? marked.parse(post.markdown || '') : post.markdown;
 
       postEl.innerHTML = `
-        <a href="blog.html" class="back-link">← back to posts</a>
+        <a href="about.html" class="back-link">← back to posts</a>
         <article class="blog-post">
           <h2 class="blog-post-title">${post.title}</h2>
           <div class="blog-post-meta">
@@ -477,7 +477,7 @@ const Blog = (() => {
       `;
     } catch {
       postEl.innerHTML = `
-        <a href="blog.html" class="back-link">← back to posts</a>
+        <a href="about.html" class="back-link">← back to posts</a>
         <p class="fetch-status error">// post not found</p>
       `;
     }
