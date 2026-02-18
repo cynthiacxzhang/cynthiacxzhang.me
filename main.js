@@ -349,16 +349,25 @@ const WorkOverview = (() => {
     if (!container) return;
 
     try {
-      const res = await sbFetch('work_experiences', 'select=company,role,date_range&order=display_order.asc');
-      if (!res.ok) throw new Error('fetch failed');
-      const rows = await res.json();
+      const [workRes, researchRes] = await Promise.all([
+        sbFetch('work_experiences', 'select=company,role,date_range&order=display_order.asc&limit=1'),
+        sbFetch('research', 'select=institution,role,date_range&order=display_order.asc&limit=1'),
+      ]);
+      if (!workRes.ok || !researchRes.ok) throw new Error('fetch failed');
+      const work = await workRes.json();
+      const research = await researchRes.json();
 
-      if (!rows.length) { container.innerHTML = '<p class="fetch-status">nothing listed yet.</p>'; return; }
+      const items = [
+        ...work.map(r => ({ role: r.role, org: r.company, date: r.date_range })),
+        ...research.map(r => ({ role: r.role, org: r.institution, date: r.date_range })),
+      ];
 
-      container.innerHTML = rows.map(r => `
+      if (!items.length) { container.innerHTML = '<p class="fetch-status">nothing listed yet.</p>'; return; }
+
+      container.innerHTML = items.map(r => `
         <div class="overview-item">
           <span class="overview-role">${r.role}</span>
-          <span class="overview-meta">${r.company}${r.date_range ? ' &mdash; ' + r.date_range : ''}</span>
+          <span class="overview-meta">${r.org}${r.date ? ' &mdash; ' + r.date : ''}</span>
         </div>
       `).join('');
     } catch {

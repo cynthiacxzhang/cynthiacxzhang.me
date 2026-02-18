@@ -123,24 +123,29 @@ nav ul a.active {
   margin-bottom: 24px;
 }
 
+.hero .bio-detail {
+  margin-top: 12px;
+}
+
 .hero .currently-exploring {
-  color: var(--accent);
+  color: var(--accent-dim);
   font-size: 13px;
-  margin-bottom: 6px;
+  margin-top: 20px;
+  margin-bottom: 4px;
 }
 
 .hero .currently-exploring::before {
   content: "# ";
-  color: var(--accent-dim);
 }
 
 .exploring-list {
   list-style: none;
-  margin-bottom: 20px;
+  padding-left: 0;
+  margin-bottom: 0;
 }
 
 .exploring-list li {
-  color: var(--accent);
+  color: var(--text-dim);
   font-size: 13px;
   padding: 1px 0;
 }
