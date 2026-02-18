@@ -274,6 +274,79 @@ const WorkExperiences = (() => {
 })();
 
 
+// ---------- research (Supabase) ----------
+
+const Research = (() => {
+  async function init() {
+    const container = document.getElementById('research-list');
+    if (!container) return;
+
+    try {
+      const res = await fetch(
+        `${SUPABASE_URL}/rest/v1/research?select=*&order=display_order.asc`,
+        { headers: { 'apikey': SUPABASE_ANON_KEY, 'Authorization': `Bearer ${SUPABASE_ANON_KEY}` } }
+      );
+      if (!res.ok) throw new Error('fetch failed');
+      const rows = await res.json();
+
+      if (!rows.length) { container.innerHTML = '<p class="fetch-status">no research listed.</p>'; return; }
+
+      container.innerHTML = rows.map(r => `
+        <div class="exp-item">
+          <div class="exp-header">
+            <h3>${r.institution}</h3>
+            <span class="date">${r.date_range || ''}</span>
+          </div>
+          <p class="role">${r.role}</p>
+          <ul>${(r.bullets || []).map(b => `<li>${b}</li>`).join('')}</ul>
+        </div>
+      `).join('');
+    } catch {
+      container.innerHTML = '<p class="fetch-status error">// error loading research</p>';
+    }
+  }
+
+  return { init };
+})();
+
+
+// ---------- projects (Supabase) ----------
+
+const Projects = (() => {
+  async function init() {
+    const container = document.getElementById('projects-list');
+    if (!container) return;
+
+    try {
+      const res = await fetch(
+        `${SUPABASE_URL}/rest/v1/projects?select=*&order=display_order.asc`,
+        { headers: { 'apikey': SUPABASE_ANON_KEY, 'Authorization': `Bearer ${SUPABASE_ANON_KEY}` } }
+      );
+      if (!res.ok) throw new Error('fetch failed');
+      const rows = await res.json();
+
+      if (!rows.length) { container.innerHTML = '<p class="fetch-status">no projects listed.</p>'; return; }
+
+      container.innerHTML = rows.map(p => `
+        <div class="project">
+          <div class="project-header">
+            <h3>${p.url ? `<a href="${p.url}" target="_blank" rel="noopener">${p.name}</a>` : p.name}</h3>
+            <span class="meta">${p.affiliation || ''}</span>
+          </div>
+          ${p.role ? `<p class="role">${p.role}</p>` : ''}
+          ${p.description ? `<p>${p.description}</p>` : ''}
+          ${p.tags?.length ? `<div class="tags">${p.tags.map(t => `<span class="tag">${t}</span>`).join('')}</div>` : ''}
+        </div>
+      `).join('');
+    } catch {
+      container.innerHTML = '<p class="fetch-status error">// error loading projects</p>';
+    }
+  }
+
+  return { init };
+})();
+
+
 // ---------- blog (Notion via /api/blog) ----------
 
 const Blog = (() => {
@@ -407,5 +480,7 @@ document.addEventListener('DOMContentLoaded', () => {
   CommandPalette.init();
   ContactForm.init();
   WorkExperiences.init();
+  Research.init();
+  Projects.init();
   Blog.init();
 });

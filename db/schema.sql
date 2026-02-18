@@ -19,6 +19,44 @@ CREATE POLICY "Public read"
   TO anon
   USING (true);
 
+-- Research positions
+CREATE TABLE research (
+  id            UUID        DEFAULT gen_random_uuid() PRIMARY KEY,
+  institution   TEXT        NOT NULL,
+  role          TEXT        NOT NULL,
+  date_range    TEXT,
+  bullets       TEXT[]      DEFAULT '{}',
+  display_order INT         DEFAULT 0,
+  created_at    TIMESTAMPTZ DEFAULT NOW()
+);
+
+ALTER TABLE research ENABLE ROW LEVEL SECURITY;
+
+CREATE POLICY "Public read"
+  ON research FOR SELECT
+  TO anon
+  USING (true);
+
+-- Projects
+CREATE TABLE projects (
+  id            UUID        DEFAULT gen_random_uuid() PRIMARY KEY,
+  name          TEXT        NOT NULL,
+  affiliation   TEXT,
+  role          TEXT,
+  description   TEXT,
+  tags          TEXT[]      DEFAULT '{}',
+  url           TEXT,
+  display_order INT         DEFAULT 0,
+  created_at    TIMESTAMPTZ DEFAULT NOW()
+);
+
+ALTER TABLE projects ENABLE ROW LEVEL SECURITY;
+
+CREATE POLICY "Public read"
+  ON projects FOR SELECT
+  TO anon
+  USING (true);
+
 -- Seed data — replace with your real details
 INSERT INTO work_experiences (company, role, date_range, bullets, display_order) VALUES
   (
