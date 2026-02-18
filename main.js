@@ -446,7 +446,7 @@ const Blog = (() => {
       container.innerHTML = posts.map(p => `
         <div class="blog-card">
           <div class="blog-card-header">
-            <a href="about.html?post=${encodeURIComponent(p.slug)}" class="blog-title">${p.title}</a>
+            <a href="post.html?post=${encodeURIComponent(p.slug)}" class="blog-title" target="_blank" rel="noopener">${p.title}</a>
             <span class="date">${formatDate(p.date)}</span>
           </div>
           ${tagsHtml(p.tags)}
@@ -458,12 +458,9 @@ const Blog = (() => {
   }
 
   async function renderPost(slug) {
-    const listEl = document.getElementById('blog-list');
     const postEl = document.getElementById('blog-post');
     if (!postEl) return;
 
-    if (listEl) listEl.style.display = 'none';
-    postEl.style.display = 'block';
     postEl.innerHTML = '<p class="fetch-status">$ fetching post...</p>';
 
     try {
@@ -473,16 +470,22 @@ const Blog = (() => {
 
       const md = window.marked ? marked.parse(post.markdown || '') : post.markdown;
 
+      // update page title
+      document.title = `${post.title} — Cynthia`;
+
       postEl.innerHTML = `
         <a href="about.html" class="back-link">← back to posts</a>
         <article class="blog-post">
-          <h2 class="blog-post-title">${post.title}</h2>
+          <h1 class="blog-post-title">${post.title}</h1>
           <div class="blog-post-meta">
             <span class="date">${formatDate(post.date)}</span>
             ${tagsHtml(post.tags)}
           </div>
           <div class="blog-content">${md}</div>
         </article>
+        <div class="post-footer">
+          <a href="about.html" class="back-link">← back to posts</a>
+        </div>
       `;
     } catch {
       postEl.innerHTML = `
