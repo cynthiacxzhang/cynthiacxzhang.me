@@ -113,12 +113,12 @@ const TriviaInteraction = (() => {
 
 const CommandPalette = (() => {
   const COMMANDS = {
-    help:     () => 'Available commands: help, about, skills, contact, clear, theme',
-    about:    () => 'Cynthia — ML Software Engineer @ UWaterloo',
-    skills:   () => 'Python, C++, SQL | PyTorch, TensorFlow, HF | Docker, AWS, Git, Linux',
-    contact:  () => { scrollToSection('contact'); return 'Scrolling to contact...'; },
-    clear:    () => { closePalette(); return ''; },
-    theme:    () => { toggleTheme(); return 'Theme toggled!'; },
+    help: () => 'Available commands: help, about, skills, contact, clear, theme',
+    about: () => 'Cynthia — ML Software Engineer @ UWaterloo',
+    skills: () => 'Python, C++, SQL | PyTorch, TensorFlow, HF | Docker, AWS, Git, Linux',
+    contact: () => { scrollToSection('contact'); return 'Scrolling to contact...'; },
+    clear: () => { closePalette(); return ''; },
+    theme: () => { toggleTheme(); return 'Theme toggled!'; },
   };
 
   let overlay = null;
@@ -221,6 +221,147 @@ const CommandPalette = (() => {
 })();
 
 
+// ---------- work experiences (Supabase) ----------
+// Supabase anon key is designed to be public — safe to commit.
+// Replace these after creating your Supabase project.
+// Docs: https://supabase.com/docs/guides/api/api-keys
+
+const WorkExperiences = (() => {
+  const SUPABASE_URL = 'https://jihajwesrgdflakhkbbg.supabase.co';
+  const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImppaGFqd2VzcmdkZmxha2hrYmJnIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzEzNjY1NjAsImV4cCI6MjA4Njk0MjU2MH0.bHPch8P8MPho6_ZxXP9L2Pd4u2cKwqhKCGrCzzp8QaQ';
+
+  function render(container, experiences) {
+    if (!experiences.length) {
+      container.innerHTML = '<p class="fetch-status">no experiences listed.</p>';
+      return;
+    }
+    container.innerHTML = experiences.map(exp => `
+      <div class="exp-item">
+        <div class="exp-header">
+          <h3>${exp.company}</h3>
+          <span class="date">${exp.date_range || ''}</span>
+        </div>
+        <p class="role">${exp.role}</p>
+        <ul>
+          ${(exp.bullets || []).map(b => `<li>${b}</li>`).join('')}
+        </ul>
+      </div>
+    `).join('');
+  }
+
+  async function init() {
+    const container = document.getElementById('work-list');
+    if (!container) return;
+
+    try {
+      const res = await fetch(
+        `${SUPABASE_URL}/rest/v1/work_experiences?select=*&order=display_order.asc`,
+        {
+          headers: {
+            'apikey': SUPABASE_ANON_KEY,
+            'Authorization': `Bearer ${SUPABASE_ANON_KEY}`,
+          },
+        }
+      );
+      if (!res.ok) throw new Error('fetch failed');
+      render(container, await res.json());
+    } catch {
+      container.innerHTML = '<p class="fetch-status error">// error loading work experiences</p>';
+    }
+  }
+
+  return { init };
+})();
+
+
+// ---------- blog (Notion via /api/blog) ----------
+
+const Blog = (() => {
+  function formatDate(str) {
+    if (!str) return '';
+    return new Date(str + 'T00:00:00').toLocaleDateString('en-US', {
+      year: 'numeric', month: 'long', day: 'numeric',
+    });
+  }
+
+  function tagsHtml(tags) {
+    if (!tags.length) return '';
+    return `<div class="tags">${tags.map(t => `<span class="tag">${t}</span>`).join('')}</div>`;
+  }
+
+  async function renderList() {
+    const container = document.getElementById('blog-list');
+    if (!container) return;
+
+    try {
+      const res = await fetch('/api/blog');
+      if (!res.ok) throw new Error('fetch failed');
+      const { posts } = await res.json();
+
+      if (!posts.length) {
+        container.innerHTML = '<p class="fetch-status">no posts yet.</p>';
+        return;
+      }
+
+      container.innerHTML = posts.map(p => `
+        <div class="blog-card">
+          <div class="blog-card-header">
+            <a href="blog.html?post=${encodeURIComponent(p.slug)}" class="blog-title">${p.title}</a>
+            <span class="date">${formatDate(p.date)}</span>
+          </div>
+          ${tagsHtml(p.tags)}
+        </div>
+      `).join('');
+    } catch {
+      container.innerHTML = '<p class="fetch-status error">// error fetching posts</p>';
+    }
+  }
+
+  async function renderPost(slug) {
+    const listEl = document.getElementById('blog-list');
+    const postEl = document.getElementById('blog-post');
+    if (!postEl) return;
+
+    if (listEl) listEl.style.display = 'none';
+    postEl.style.display = 'block';
+    postEl.innerHTML = '<p class="fetch-status">$ fetching post...</p>';
+
+    try {
+      const res = await fetch(`/api/blog/${encodeURIComponent(slug)}`);
+      if (!res.ok) throw new Error('not found');
+      const post = await res.json();
+
+      const md = window.marked ? marked.parse(post.markdown || '') : post.markdown;
+
+      postEl.innerHTML = `
+        <a href="blog.html" class="back-link">← back to posts</a>
+        <article class="blog-post">
+          <h2 class="blog-post-title">${post.title}</h2>
+          <div class="blog-post-meta">
+            <span class="date">${formatDate(post.date)}</span>
+            ${tagsHtml(post.tags)}
+          </div>
+          <div class="blog-content">${md}</div>
+        </article>
+      `;
+    } catch {
+      postEl.innerHTML = `
+        <a href="blog.html" class="back-link">← back to posts</a>
+        <p class="fetch-status error">// post not found</p>
+      `;
+    }
+  }
+
+  function init() {
+    const slug = new URLSearchParams(window.location.search).get('post');
+    if (slug) renderPost(slug);
+    else renderList();
+  }
+
+  return { init };
+})();
+
+
 // ---------- contact form ----------
 
 const ContactForm = (() => {
@@ -265,4 +406,6 @@ document.addEventListener('DOMContentLoaded', () => {
   TriviaInteraction.init();
   CommandPalette.init();
   ContactForm.init();
+  WorkExperiences.init();
+  Blog.init();
 });

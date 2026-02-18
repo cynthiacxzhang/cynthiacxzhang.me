@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Work — Cynthia</title>
+  <title>Blog — Cynthia</title>
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
@@ -13,8 +13,8 @@
     <a href="index.html" class="logo">cynthia</a>
     <ul>
       <li><a href="index.html">home</a></li>
-      <li><a href="work.html" class="active">work</a></li>
-      <li><a href="blog.html">blog</a></li>
+      <li><a href="work.html">work</a></li>
+      <li><a href="blog.html" class="active">blog</a></li>
       <li><a href="index.html#contact">contact</a></li>
     </ul>
   </div>
@@ -22,26 +22,15 @@
 
 <section style="border-top: none;">
   <div class="container">
-    <p class="section-label">work experience</p>
+    <p class="section-label">blog</p>
 
-    <div id="work-list" aria-live="polite">
-      <p class="fetch-status">$ loading...</p>
+    <!-- post list (default view) -->
+    <div id="blog-list" aria-live="polite">
+      <p class="fetch-status">$ fetching posts...</p>
     </div>
-  </div>
-</section>
 
-<section>
-  <div class="container">
-    <p class="section-label">projects</p>
-
-    <div class="project">
-      <div class="project-header">
-        <h3>Trust Network</h3>
-        <span class="meta">University of Waterloo</span>
-      </div>
-      <p class="role">Machine Learning Research Assistant</p>
-      <p>Details coming soon</p>
-    </div>
+    <!-- single post view (shown when ?post=slug is in URL) -->
+    <div id="blog-post" style="display:none" aria-live="polite"></div>
   </div>
 </section>
 
@@ -51,6 +40,8 @@
   </div>
 </footer>
 
+<!-- markdown renderer (used for blog post content) -->
+<script src="https://cdn.jsdelivr.net/npm/marked@12/marked.min.js"></script>
 <script src="main.js"></script>
 
 </body>
