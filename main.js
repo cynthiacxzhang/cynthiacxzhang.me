@@ -221,14 +221,22 @@ const CommandPalette = (() => {
 })();
 
 
-// ---------- work experiences (Supabase) ----------
-// Supabase anon key is designed to be public — safe to commit.
-// Replace these after creating your Supabase project.
+// ---------- supabase config ----------
+// Anon key is designed to be public — safe to commit.
 // Docs: https://supabase.com/docs/guides/api/api-keys
 
+const SUPABASE_URL = 'https://jihajwesrgdflakhkbbg.supabase.co';
+const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImppaGFqd2VzcmdkZmxha2hrYmJnIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzEzNjY1NjAsImV4cCI6MjA4Njk0MjU2MH0.bHPch8P8MPho6_ZxXP9L2Pd4u2cKwqhKCGrCzzp8QaQ';
+
+const sbFetch = (table, params = '') =>
+  fetch(`${SUPABASE_URL}/rest/v1/${table}?${params}`, {
+    headers: { 'apikey': SUPABASE_ANON_KEY, 'Authorization': `Bearer ${SUPABASE_ANON_KEY}` },
+  });
+
+
+// ---------- work experiences (Supabase) ----------
+
 const WorkExperiences = (() => {
-  const SUPABASE_URL = 'https://jihajwesrgdflakhkbbg.supabase.co';
-  const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImppaGFqd2VzcmdkZmxha2hrYmJnIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzEzNjY1NjAsImV4cCI6MjA4Njk0MjU2MH0.bHPch8P8MPho6_ZxXP9L2Pd4u2cKwqhKCGrCzzp8QaQ';
 
   function render(container, experiences) {
     if (!experiences.length) {
@@ -254,15 +262,7 @@ const WorkExperiences = (() => {
     if (!container) return;
 
     try {
-      const res = await fetch(
-        `${SUPABASE_URL}/rest/v1/work_experiences?select=*&order=display_order.asc`,
-        {
-          headers: {
-            'apikey': SUPABASE_ANON_KEY,
-            'Authorization': `Bearer ${SUPABASE_ANON_KEY}`,
-          },
-        }
-      );
+      const res = await sbFetch('work_experiences', 'select=*&order=display_order.asc');
       if (!res.ok) throw new Error('fetch failed');
       render(container, await res.json());
     } catch {
@@ -282,10 +282,7 @@ const Research = (() => {
     if (!container) return;
 
     try {
-      const res = await fetch(
-        `${SUPABASE_URL}/rest/v1/research?select=*&order=display_order.asc`,
-        { headers: { 'apikey': SUPABASE_ANON_KEY, 'Authorization': `Bearer ${SUPABASE_ANON_KEY}` } }
-      );
+      const res = await sbFetch('research', 'select=*&order=display_order.asc');
       if (!res.ok) throw new Error('fetch failed');
       const rows = await res.json();
 
@@ -318,10 +315,7 @@ const Projects = (() => {
     if (!container) return;
 
     try {
-      const res = await fetch(
-        `${SUPABASE_URL}/rest/v1/projects?select=*&order=display_order.asc`,
-        { headers: { 'apikey': SUPABASE_ANON_KEY, 'Authorization': `Bearer ${SUPABASE_ANON_KEY}` } }
-      );
+      const res = await sbFetch('projects', 'select=*&order=display_order.asc');
       if (!res.ok) throw new Error('fetch failed');
       const rows = await res.json();
 
@@ -340,6 +334,70 @@ const Projects = (() => {
       `).join('');
     } catch {
       container.innerHTML = '<p class="fetch-status error">// error loading projects</p>';
+    }
+  }
+
+  return { init };
+})();
+
+
+// ---------- work overview (index.html, compact list) ----------
+
+const WorkOverview = (() => {
+  async function init() {
+    const container = document.getElementById('work-overview');
+    if (!container) return;
+
+    try {
+      const res = await sbFetch('work_experiences', 'select=company,role,date_range&order=display_order.asc');
+      if (!res.ok) throw new Error('fetch failed');
+      const rows = await res.json();
+
+      if (!rows.length) { container.innerHTML = '<p class="fetch-status">nothing listed yet.</p>'; return; }
+
+      container.innerHTML = rows.map(r => `
+        <div class="overview-item">
+          <span class="overview-role">${r.role}</span>
+          <span class="overview-meta">${r.company}${r.date_range ? ' &mdash; ' + r.date_range : ''}</span>
+        </div>
+      `).join('');
+    } catch {
+      container.innerHTML = '<p class="fetch-status error">// error loading work</p>';
+    }
+  }
+
+  return { init };
+})();
+
+
+// ---------- featured project (index.html, "my work") ----------
+
+const FeaturedProject = (() => {
+  async function init() {
+    const container = document.getElementById('featured-project');
+    if (!container) return;
+
+    try {
+      const res = await sbFetch('projects', 'select=*&order=display_order.asc&limit=1');
+      if (!res.ok) throw new Error('fetch failed');
+      const rows = await res.json();
+
+      if (!rows.length) { container.innerHTML = '<p class="fetch-status">coming soon.</p>'; return; }
+
+      const p = rows[0];
+      container.innerHTML = `
+        <div class="project">
+          <div class="project-header">
+            <h3>${p.url ? `<a href="${p.url}" target="_blank" rel="noopener">${p.name}</a>` : p.name}</h3>
+            <span class="meta">${p.affiliation || ''}</span>
+          </div>
+          ${p.role ? `<p class="role">${p.role}</p>` : ''}
+          ${p.description ? `<p>${p.description}</p>` : ''}
+          ${p.tags?.length ? `<div class="tags">${p.tags.map(t => `<span class="tag">${t}</span>`).join('')}</div>` : ''}
+        </div>
+      `;
+    } catch {
+      container.innerHTML = '<p class="fetch-status error">// error loading project</p>';
     }
   }
 
@@ -480,7 +538,9 @@ document.addEventListener('DOMContentLoaded', () => {
   CommandPalette.init();
   ContactForm.init();
   WorkExperiences.init();
+  WorkOverview.init();
   Research.init();
   Projects.init();
+  FeaturedProject.init();
   Blog.init();
 });
