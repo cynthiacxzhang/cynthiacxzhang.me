@@ -599,16 +599,26 @@ body.dark-mode .blog-content h2 {
 
 /* --- my story --- */
 
+.story-block {
+  margin-bottom: 28px;
+}
+
+.story-block:last-child {
+  margin-bottom: 0;
+}
+
+.story-comment {
+  display: block;
+  color: var(--accent-dim);
+  font-size: 12px;
+  margin-bottom: 6px;
+}
+
 .story-body p {
   color: var(--text-dim);
   font-size: 13px;
   max-width: 540px;
-  margin-bottom: 12px;
   line-height: 1.8;
-}
-
-.story-body p:last-child {
-  margin-bottom: 0;
 }
 
 /* --- work overview (index) --- */
