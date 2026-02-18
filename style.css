@@ -123,6 +123,17 @@ nav ul a.active {
   margin-bottom: 24px;
 }
 
+.hero .currently-exploring {
+  color: var(--accent);
+  font-size: 13px;
+  margin-bottom: 20px;
+}
+
+.hero .currently-exploring::before {
+  content: "# ";
+  color: var(--accent-dim);
+}
+
 .hero .bio {
   color: var(--text-dim);
   max-width: 540px;
