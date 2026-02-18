@@ -30,7 +30,7 @@ module.exports = async function handler(req, res) {
 
     const page = response.results[0];
     const mdBlocks = await n2m.pageToMarkdown(page.id);
-    const { parent: markdown } = n2m.toMarkdownString(mdBlocks);
+    const markdown = n2m.toMarkdownString(mdBlocks).parent ?? '';
 
     res.json({
       slug,
