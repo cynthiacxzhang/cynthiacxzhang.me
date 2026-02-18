@@ -15,7 +15,7 @@ module.exports = async function handler(req, res) {
       database_id: DB_ID,
       filter: {
         property: 'Status',
-        select: { equals: 'Published' },
+        status: { equals: 'Published' },
       },
       sorts: [{ property: 'Date', direction: 'descending' }],
     });

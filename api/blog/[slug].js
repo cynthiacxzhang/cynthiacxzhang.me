@@ -19,7 +19,7 @@ module.exports = async function handler(req, res) {
       filter: {
         and: [
           { property: 'Slug', rich_text: { equals: slug } },
-          { property: 'Status', select: { equals: 'Published' } },
+          { property: 'Status', status: { equals: 'Published' } },
         ],
       },
     });
