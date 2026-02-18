@@ -151,7 +151,7 @@ nav ul a.active {
 }
 
 .exploring-list li::before {
-  content: "· ";
+  content: "> ";
   color: var(--accent-dim);
 }
 
