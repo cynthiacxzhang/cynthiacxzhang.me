@@ -1,0 +1,27 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(git add:*)",
+      "Bash(git commit:*)",
+      "Bash(git push:*)",
+      "Bash(open:*)",
+      "Bash(npm install:*)",
+      "Bash(npx vercel:*)",
+      "Bash(curl:*)",
+      "Bash(python3:*)",
+      "Bash(printf:*)",
+      "Bash(git -C /Users/Cynthia/personal-site add index.html style.css)",
+      "Bash(git -C /Users/Cynthia/personal-site commit -m \"add currently exploring bullet points\")",
+      "Bash(git -C /Users/Cynthia/personal-site push)",
+      "Bash(git -C /Users/Cynthia/personal-site add index.html main.js)",
+      "Bash(git -C /Users/Cynthia/personal-site commit -m \"update title\")",
+      "Bash(git -C /Users/Cynthia/personal-site add index.html style.css main.js)",
+      "Bash(git -C /Users/Cynthia/personal-site commit -m \"fix hero layout and work overview\")",
+      "Bash(git -C /Users/Cynthia/personal-site add style.css)",
+      "Bash(git -C /Users/Cynthia/personal-site commit -m \"use > as exploring bullet\")",
+      "Bash(git -C /Users/Cynthia/personal-site add about.html style.css)",
+      "Bash(git -C /Users/Cynthia/personal-site commit -m \"add my story content\")",
+      "WebFetch(domain:cynthiacxzhang.vercel.app)"
+    ]
+  }
+}
