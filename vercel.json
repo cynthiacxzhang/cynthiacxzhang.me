@@ -1,3 +1,5 @@
 {
-  "alias": ["cynthiacxzhang.vercel.app"]
+  "alias": ["cynthiacxzhang.vercel.app"],
+  "cleanUrls": true,
+  "trailingSlash": false
 }
