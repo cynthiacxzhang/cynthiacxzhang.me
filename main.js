@@ -594,8 +594,18 @@ const GraphViz = (() => {
     const H = Math.max(600, window.innerHeight * 0.75);
     const R = 30;
 
-    // clone so D3 can mutate freely
-    const nodes = NODES.map(n => ({ ...n }));
+    // seed initial positions spread across the SVG so nodes don't all spawn at center
+    const initPos = {
+      gym:   [0.18, 0.15], mun:   [0.12, 0.50],
+      uw:    [0.45, 0.22], rbc:   [0.22, 0.78],
+      trust: [0.72, 0.32], ipc:   [0.82, 0.65],
+      ws:    [0.52, 0.82],
+    };
+    const nodes = NODES.map(n => ({
+      ...n,
+      x: W * (initPos[n.id]?.[0] ?? 0.5),
+      y: H * (initPos[n.id]?.[1] ?? 0.5),
+    }));
     const links = LINKS.map(l => ({ ...l }));
 
     const svg = d3.select(wrap).append('svg')
@@ -669,7 +679,7 @@ const GraphViz = (() => {
     sim.on('tick', () => {
       nodes.forEach(d => {
         d.x = Math.max(110, Math.min(W - 110, d.x));
-        d.y = Math.max(R + 16, Math.min(H - R - 50, d.y));
+        d.y = Math.max(R + 8, Math.min(H - R - 8, d.y));
       });
       const setEdge = sel => sel
         .attr('x1', d => d.source.x).attr('y1', d => d.source.y)
