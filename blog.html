@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Work — Cynthia</title>
+  <title>Blog — Cynthia</title>
   <link rel="icon" type="image/svg+xml" href="favicon.svg">
   <link rel="stylesheet" href="style.css">
 </head>
@@ -14,9 +14,9 @@
     <a href="/" class="logo">cynthia</a>
     <ul>
       <li><a href="/">home</a></li>
-      <li><a href="/work" class="active">work</a></li>
+      <li><a href="/work">work</a></li>
       <li><a href="/about">about</a></li>
-      <li><a href="/blog">blog</a></li>
+      <li><a href="/blog" class="active">blog</a></li>
       <li><a href="/#contact">contact</a></li>
     </ul>
   </div>
@@ -24,30 +24,10 @@
 
 <section style="border-top: none;">
   <div class="container">
-    <p class="section-label">work experience</p>
+    <p class="section-label">blog</p>
 
-    <div id="work-list" aria-live="polite">
-      <p class="fetch-status">$ loading...</p>
-    </div>
-  </div>
-</section>
-
-<section>
-  <div class="container">
-    <p class="section-label">research</p>
-
-    <div id="research-list" aria-live="polite">
-      <p class="fetch-status">$ loading...</p>
-    </div>
-  </div>
-</section>
-
-<section>
-  <div class="container">
-    <p class="section-label">projects</p>
-
-    <div id="projects-list" aria-live="polite">
-      <p class="fetch-status">$ loading...</p>
+    <div id="blog-list" aria-live="polite">
+      <p class="fetch-status">$ fetching posts...</p>
     </div>
   </div>
 </section>
@@ -58,6 +38,7 @@
   </div>
 </footer>
 
+<script src="https://cdn.jsdelivr.net/npm/marked@12/marked.min.js"></script>
 <script src="main.js"></script>
 
 </body>

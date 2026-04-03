@@ -474,7 +474,7 @@ const Blog = (() => {
       document.title = `${post.title} — Cynthia`;
 
       postEl.innerHTML = `
-        <a href="/about" class="back-link">← back to posts</a>
+        <a href="/blog" class="back-link">← back to posts</a>
         <article class="blog-post">
           <h1 class="blog-post-title">${post.title}</h1>
           <div class="blog-post-meta">
@@ -484,12 +484,12 @@ const Blog = (() => {
           <div class="blog-content">${md}</div>
         </article>
         <div class="post-footer">
-          <a href="/about" class="back-link">← back to posts</a>
+          <a href="/blog" class="back-link">← back to posts</a>
         </div>
       `;
     } catch {
       postEl.innerHTML = `
-        <a href="/about" class="back-link">← back to posts</a>
+        <a href="/blog" class="back-link">← back to posts</a>
         <p class="fetch-status error">// post not found</p>
       `;
     }
