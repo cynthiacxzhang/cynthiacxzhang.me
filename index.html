@@ -17,7 +17,7 @@
       <ul>
         <li><a href="/" class="active">home</a></li>
         <li><a href="/work">work</a></li>
-        <li><a href="/about">about</a></li>
+        <li><a href="#story">about</a></li>
         <li><a href="/blog">blog</a></li>
         <li><a href="#contact">contact</a></li>
       </ul>
@@ -33,13 +33,6 @@
         I study intelligence — machine and human — to bridge frontier model capabilities
         with compliance and ethics-driven design in high-stakes systems.
       </p>
-      <p class="bio bio-detail">
-        Computer Engineering at Waterloo, double minoring in psychology and cognitive science.
-        Researching model fairness and AI literacy at the TRuST Network, Waterloo — investigating
-        how over-generalization degrades model performance on minority groups and building tools
-        to make those failures legible to policymakers. Policy advisor at the IPC, Ontario's AI
-        and data privacy regulatory body. Formerly at RBC Borealis.
-      </p>
       <p class="currently-exploring">currently exploring</p>
       <ul class="exploring-list">
         <li>multimodal learning in content delivery networks</li>
@@ -52,9 +45,29 @@
     </div>
   </header>
 
+  <section id="story" style="border-top: none; padding-bottom: 40px;">
+    <div class="container">
+      <p class="section-label">my story</p>
+    </div>
+    <div id="story-graph" class="story-graph-wrap"></div>
+    <div class="container">
+      <p class="graph-hint">hover edges to trace connections · click nodes to explore</p>
+      <div id="node-panel" class="node-panel">
+        <div class="node-panel-header">
+          <div class="node-panel-meta">
+            <span class="node-panel-title"></span>
+            <span class="node-panel-dates"></span>
+          </div>
+          <button class="node-panel-close" aria-label="Close">×</button>
+        </div>
+        <div class="node-panel-body"></div>
+      </div>
+    </div>
+  </section>
+
   <section id="about">
     <div class="container">
-      <p class="section-label">about me</p>
+      <p class="section-label">quick facts</p>
       <div class="trivia">
         <div class="trivia-item">
           <span class="trivia-key">school</span>
@@ -163,10 +176,8 @@
       <p class="section-label">contact</p>
       <ul class="contact-list">
         <li><span class="label">email</span> <a href="mailto:cczhang@uwaterloo.ca">cczhang@uwaterloo.ca</a></li>
-        <li><span class="label">github</span> <a href="https://github.com/cynthiacxzhang">github.com/cynthiacxzhang</a>
-        </li>
-        <li><span class="label">linkedin</span> <a
-            href="https://linkedin.com/in/cynthiacxzhang">linkedin.com/in/cynthiacxzhang</a></li>
+        <li><span class="label">github</span> <a href="https://github.com/cynthiacxzhang">github.com/cynthiacxzhang</a></li>
+        <li><span class="label">linkedin</span> <a href="https://linkedin.com/in/cynthiacxzhang">linkedin.com/in/cynthiacxzhang</a></li>
       </ul>
 
       <form class="contact-form" id="contactForm">
@@ -194,6 +205,7 @@
     </div>
   </footer>
 
+  <script src="https://cdn.jsdelivr.net/npm/d3@7/dist/d3.min.js"></script>
   <script src="main.js"></script>
 
 </body>
