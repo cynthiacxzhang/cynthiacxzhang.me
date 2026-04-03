@@ -591,8 +591,8 @@ const GraphViz = (() => {
     if (!wrap || typeof d3 === 'undefined') return;
 
     const W = document.documentElement.clientWidth;
-    const H = 600;
-    const R = 26;
+    const H = Math.max(600, window.innerHeight * 0.75);
+    const R = 30;
 
     // clone so D3 can mutate freely
     const nodes = NODES.map(n => ({ ...n }));
@@ -660,10 +660,10 @@ const GraphViz = (() => {
     nodeEl.append('circle').attr('r', R)
       .attr('class', d => 'graph-circle' + (d.active ? ' graph-circle-active' : ''));
 
-    nodeEl.append('text').attr('class', 'graph-label').attr('text-anchor', 'middle').attr('dy', R + 18)
+    nodeEl.append('text').attr('class', 'graph-label').attr('text-anchor', 'middle').attr('dy', R + 20)
       .text(d => d.label);
 
-    nodeEl.append('text').attr('class', 'graph-sub').attr('text-anchor', 'middle').attr('dy', R + 33)
+    nodeEl.append('text').attr('class', 'graph-sub').attr('text-anchor', 'middle').attr('dy', R + 36)
       .text(d => d.sub);
 
     sim.on('tick', () => {

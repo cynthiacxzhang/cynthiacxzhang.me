@@ -1004,13 +1004,13 @@ footer span {
 
 .graph-edge {
   stroke: var(--border);
-  stroke-width: 1;
+  stroke-width: 1.5;
   fill: none;
 }
 
 .graph-edge-active {
   stroke: var(--accent);
-  stroke-width: 1.5;
+  stroke-width: 2;
 }
 
 .graph-edge-hit {
@@ -1044,7 +1044,7 @@ footer span {
 
 .graph-label {
   font-family: var(--font);
-  font-size: 11px;
+  font-size: 12px;
   fill: var(--text);
   pointer-events: none;
   user-select: none;
@@ -1052,7 +1052,7 @@ footer span {
 
 .graph-sub {
   font-family: var(--font);
-  font-size: 10px;
+  font-size: 11px;
   fill: var(--text-dim);
   pointer-events: none;
   user-select: none;
