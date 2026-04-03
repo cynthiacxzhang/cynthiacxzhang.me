@@ -1,0 +1,13 @@
+{
+	"folders": [
+		{
+			"name": "nano-llm",
+			"path": "../nano-llm"
+		},
+		{
+			"name": "personal-site",
+			"path": "."
+		}
+	],
+	"settings": {}
+}

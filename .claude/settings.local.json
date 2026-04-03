@@ -21,7 +21,9 @@
       "Bash(git -C /Users/Cynthia/personal-site commit -m \"use > as exploring bullet\")",
       "Bash(git -C /Users/Cynthia/personal-site add about.html style.css)",
       "Bash(git -C /Users/Cynthia/personal-site commit -m \"add my story content\")",
-      "WebFetch(domain:cynthiacxzhang.vercel.app)"
+      "WebFetch(domain:cynthiacxzhang.vercel.app)",
+      "Bash(gh repo create:*)",
+      "WebSearch"
     ]
   }
 }

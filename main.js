@@ -291,7 +291,7 @@ const Research = (() => {
       container.innerHTML = rows.map(r => `
         <div class="exp-item">
           <div class="exp-header">
-            <h3>${r.institution}</h3>
+            <h3>${r.url ? `<a href="${r.url}" target="_blank" rel="noopener">${r.institution}</a>` : r.institution}</h3>
             <span class="date">${r.date_range || ''}</span>
           </div>
           <p class="role">${r.role}</p>

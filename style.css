@@ -49,7 +49,7 @@ a:hover {
 /* --- layout --- */
 
 .container {
-  max-width: 720px;
+  max-width: 1100px;
   margin: 0 auto;
   padding: 0 24px;
 }
@@ -609,27 +609,141 @@ body.dark-mode .blog-content h2 {
   color: #e8e8e8;
 }
 
-/* --- my story --- */
+/* --- timeline --- */
 
-.story-block {
-  margin-bottom: 28px;
+.timeline {
+  position: relative;
+  padding-left: 28px;
+  margin-bottom: 36px;
 }
 
-.story-block:last-child {
-  margin-bottom: 0;
+.timeline::before {
+  content: '';
+  position: absolute;
+  left: 7px;
+  top: 8px;
+  bottom: 8px;
+  width: 1px;
+  background: var(--border);
 }
 
-.story-comment {
-  display: block;
+.tl-item {
+  position: relative;
+  display: flex;
+  align-items: baseline;
+  gap: 16px;
+  padding: 5px 0;
+}
+
+.tl-dot {
+  position: absolute;
+  left: -23px;
+  top: 9px;
+  width: 5px;
+  height: 5px;
+  background: var(--border);
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.tl-dot-active {
+  background: var(--accent);
+}
+
+.tl-year {
+  font-size: 11px;
+  color: var(--text-dim);
+  min-width: 88px;
+  flex-shrink: 0;
+}
+
+.tl-body {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+}
+
+.tl-title {
+  font-size: 13px;
+  color: var(--text);
+  font-weight: 500;
+}
+
+.tl-sub {
+  font-size: 12px;
+  color: var(--text-dim);
+}
+
+/* --- my story accordion --- */
+
+.story-accordion {
+  border-bottom: 1px solid var(--border);
+}
+
+.story-accordion:last-child {
+  border-bottom: none;
+}
+
+.story-summary {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+  list-style: none;
+  padding: 14px 0;
   color: var(--accent-dim);
   font-size: 12px;
-  margin-bottom: 6px;
+  user-select: none;
+  transition: color 0.15s;
 }
 
-.story-body p {
+.story-summary::-webkit-details-marker {
+  display: none;
+}
+
+.story-summary::before {
+  content: "▶";
+  color: var(--text-dim);
+  font-size: 9px;
+  display: inline-block;
+  transition: transform 0.2s;
+  flex-shrink: 0;
+}
+
+details[open] > .story-summary::before {
+  transform: rotate(90deg);
+}
+
+.story-summary:hover {
+  color: var(--accent);
+}
+
+.story-accordion-content {
+  padding: 0 0 18px 20px;
+}
+
+.story-accordion-content p {
   color: var(--text-dim);
   font-size: 13px;
   line-height: 1.8;
+}
+
+.story-links {
+  list-style: none;
+  margin-top: 10px;
+}
+
+.story-links li {
+  font-size: 12px;
+  padding: 2px 0;
+}
+
+.story-links a {
+  color: var(--accent-dim);
+}
+
+.story-links a:hover {
+  color: var(--accent);
 }
 
 /* --- work overview (index) --- */
