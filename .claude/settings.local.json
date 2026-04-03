@@ -23,7 +23,11 @@
       "Bash(git -C /Users/Cynthia/personal-site commit -m \"add my story content\")",
       "WebFetch(domain:cynthiacxzhang.vercel.app)",
       "Bash(gh repo create:*)",
-      "WebSearch"
+      "WebSearch",
+      "Bash(uv:*)",
+      "Bash(pip3 show:*)",
+      "WebFetch(domain:pypi.org)",
+      "WebFetch(domain:github.com)"
     ]
   }
 }

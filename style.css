@@ -49,7 +49,7 @@ a:hover {
 /* --- layout --- */
 
 .container {
-  max-width: 960px;
+  max-width: 840px;
   margin: 0 auto;
   padding: 0 24px;
 }
@@ -469,7 +469,9 @@ section {
 }
 
 @keyframes blink {
-  50% { opacity: 0; }
+  50% {
+    opacity: 0;
+  }
 }
 
 /* --- scroll reveal --- */
@@ -557,10 +559,21 @@ section {
   line-height: 1.5;
 }
 
-.cmd-input { color: #ccc; }
-.cmd-result { color: var(--accent); }
-.cmd-error { color: var(--red); }
-.cmd-dim { color: #555; }
+.cmd-input {
+  color: #ccc;
+}
+
+.cmd-result {
+  color: var(--accent);
+}
+
+.cmd-error {
+  color: var(--red);
+}
+
+.cmd-dim {
+  color: #555;
+}
 
 .cmd-input-row {
   display: flex;
@@ -710,7 +723,7 @@ body.dark-mode .blog-content h2 {
   flex-shrink: 0;
 }
 
-details[open] > .story-summary::before {
+details[open]>.story-summary::before {
   transform: rotate(90deg);
 }
 
@@ -859,19 +872,40 @@ details[open] > .story-summary::before {
   font-weight: 600;
 }
 
-.blog-content h1 { font-size: 17px; }
-.blog-content h2 { font-size: 15px; }
-.blog-content h3 { font-size: 13px; color: var(--accent); }
-.blog-content h4 { font-size: 13px; color: var(--text-dim); }
+.blog-content h1 {
+  font-size: 17px;
+}
+
+.blog-content h2 {
+  font-size: 15px;
+}
+
+.blog-content h3 {
+  font-size: 13px;
+  color: var(--accent);
+}
+
+.blog-content h4 {
+  font-size: 13px;
+  color: var(--text-dim);
+}
 
 .blog-content p {
   margin-bottom: 16px;
 }
 
-.blog-content a { color: var(--accent); }
+.blog-content a {
+  color: var(--accent);
+}
 
-.blog-content strong { color: var(--text); font-weight: 600; }
-.blog-content em { color: var(--text); }
+.blog-content strong {
+  color: var(--text);
+  font-weight: 600;
+}
+
+.blog-content em {
+  color: var(--text);
+}
 
 .blog-content code {
   font-family: var(--font);
@@ -941,6 +975,7 @@ footer span {
 /* --- responsive --- */
 
 @media (max-width: 520px) {
+
   .skills-grid,
   .trivia {
     grid-template-columns: 1fr;
