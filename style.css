@@ -1238,9 +1238,10 @@ footer span {
   animation: bob-down 2s ease-in-out infinite;
 }
 
-/* up hint — sits at bottom, visible when IN contact */
+/* up hint — sits at top, visible when IN contact */
 .scroll-hint-up {
-  bottom: 24px;
+  top: 72px;
+  bottom: auto;
   flex-direction: column-reverse;
   animation: bob-up 2s ease-in-out infinite;
 }
