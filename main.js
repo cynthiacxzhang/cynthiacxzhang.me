@@ -509,12 +509,52 @@ const Blog = (() => {
 
 const GraphViz = (() => {
   const NODES = [
-    { id: 'gym',   label: 'National Team',  sub: '2010–2022', active: false },
-    { id: 'mun',   label: 'Model UN',        sub: '2016–2022', active: false },
-    { id: 'uw',    label: 'U of Waterloo',   sub: '2022–now',  active: true  },
-    { id: 'rbc',   label: 'RBC Borealis',    sub: '2023',      active: false },
-    { id: 'trust', label: 'TRuST Network',   sub: '2024–now',  active: true  },
-    { id: 'ipc',   label: 'IPC Ontario',     sub: '2024–now',  active: true  },
+    {
+      id: 'gym', label: 'National Team', sub: '2010–2022', active: false,
+      panelTitle: 'Canadian National Team',
+      panelDates: 'Rhythmic Gymnastics · 2010–2022',
+      content: '12 years on the Canadian senior national team. Discipline, iterative improvement, and performing under pressure — the kind of training that doesn\'t have a defined endpoint.',
+      links: [
+        { href: 'https://youtu.be/RSqaEIa58dQ?t=9', text: '↗ competition in greece (video)' },
+        { href: 'https://ottawasportspages.ca/2018/04/13/kanata-gymnasts-find-rhythm-abroad/', text: '↗ kanata gymnasts find rhythm abroad (2018)' },
+      ],
+    },
+    {
+      id: 'mun', label: 'Model UN', sub: '2016–2022', active: false,
+      panelTitle: 'Where It Started',
+      panelDates: 'Model UN · 2016–2022',
+      content: 'I never planned to be an engineer. For six years, I led my high school\'s Model UN team, where I spent a lot of time working on technology-related proposals for the UN General Assembly. The problems were often clear, but I kept running into the same frustration: I could explain what needed to happen, but I didn\'t yet have the tools to build it myself. That gap is what pulled me toward computer engineering.',
+    },
+    {
+      id: 'uw', label: 'U of Waterloo', sub: '2022–now', active: true,
+      panelTitle: 'University of Waterloo',
+      panelDates: 'Computer Engineering · 2022–now',
+      content: 'Once I got there, I realized I was interested in more than just building systems. I wanted to understand what those systems were actually doing, especially when they were meant to model human intelligence. That led me to double minor in psychology and cognitive science, where I started thinking more seriously about how intelligence works in humans and how it gets represented in machines.',
+    },
+    {
+      id: 'rbc', label: 'RBC Borealis', sub: '2023', active: false,
+      panelTitle: 'Intro to Industry',
+      panelDates: 'RBC Borealis · 2023',
+      content: 'Outside of academia, my internships shifted my focus to deployment. At RBC Borealis, I worked on a project that exposes a high-profile financial dataset to 17k employees through an agentic interface. I observed how machine intelligence often falls short of replicating or augmenting human intelligence in a real-world setting — and how this gap can have significant consequences.',
+    },
+    {
+      id: 'trust', label: 'TRuST Network', sub: '2024–now', active: true,
+      panelTitle: 'Where AI Meets Humans',
+      panelDates: 'TRuST Network, Waterloo · 2024–now',
+      content: 'At the University of Waterloo\'s TRuST Network, I studied how inductive reasoning and overgeneralization affect model performance on statistical minority groups. I was interested in how those failure modes could be made visible in ways that were useful beyond the technical side — legible to policymakers and practitioners, not just researchers.',
+    },
+    {
+      id: 'ipc', label: 'IPC Ontario', sub: '2024–now', active: true,
+      panelTitle: 'Regulating Innovation',
+      panelDates: 'IPC Ontario · 2024–now',
+      content: 'Being part of the IPC\'s advisory body made the policy side harder to ignore. In working on the IPC\'s AI and privacy policy — including drafting the Charter on Digital Security in secondary schools — I saw how governance moves at a pace slower than the systems being regulated. That gap made it difficult to separate my technical work from its broader effects in practice.',
+    },
+    {
+      id: 'ws', label: 'Wealthsimple', sub: 'incoming', active: true,
+      panelTitle: 'Wealthsimple',
+      panelDates: 'Data & ML · incoming',
+      content: 'Incoming Data & ML internship — applying everything above at the intersection of machine learning and financial systems.',
+    },
   ];
 
   const LINKS = [
@@ -536,14 +576,22 @@ const GraphViz = (() => {
       story: 'Seeing real failure modes made abstract fairness metrics concrete. The gap between benchmark performance and production behaviour is where it gets serious.' },
     { source: 'trust', target: 'ipc',
       story: 'Research on minority group performance degradation found its audience: policymakers who needed technical failures made legible.' },
+    { source: 'uw',    target: 'ws',
+      story: 'The technical foundation for working at the intersection of ML and financial systems.' },
+    { source: 'rbc',   target: 'ws',
+      story: 'Production financial AI at scale — the infrastructure patterns carry over, the stakes scale up.' },
+    { source: 'trust', target: 'ws',
+      story: 'Fairness in financial ML is where the academic question meets real user impact.' },
+    { source: 'ipc',   target: 'ws',
+      story: 'Understanding the regulatory framework before building inside it.' },
   ];
 
   function init() {
     const wrap = document.getElementById('story-graph');
     if (!wrap || typeof d3 === 'undefined') return;
 
-    const W = wrap.offsetWidth || 730;
-    const H = 400;
+    const W = document.documentElement.clientWidth;
+    const H = 520;
     const R = 20;
 
     // clone so D3 can mutate freely
@@ -556,10 +604,10 @@ const GraphViz = (() => {
       .attr('preserveAspectRatio', 'xMidYMid meet');
 
     const sim = d3.forceSimulation(nodes)
-      .force('link', d3.forceLink(links).id(d => d.id).distance(160).strength(0.7))
-      .force('charge', d3.forceManyBody().strength(-380))
+      .force('link', d3.forceLink(links).id(d => d.id).distance(180).strength(0.6))
+      .force('charge', d3.forceManyBody().strength(-420))
       .force('center', d3.forceCenter(W / 2, H / 2))
-      .force('collide', d3.forceCollide(68))
+      .force('collide', d3.forceCollide(72))
       .alphaDecay(0.02);
 
     const tooltip = d3.select(wrap).append('div')
@@ -595,7 +643,19 @@ const GraphViz = (() => {
         .on('start', (ev, d) => { if (!ev.active) sim.alphaTarget(0.3).restart(); d.fx = d.x; d.fy = d.y; })
         .on('drag',  (ev, d) => { d.fx = ev.x; d.fy = ev.y; })
         .on('end',   (ev, d) => { if (!ev.active) sim.alphaTarget(0); d.fx = null; d.fy = null; })
-      );
+      )
+      .on('click', (ev, d) => {
+        ev.stopPropagation();
+        const circle = d3.select(ev.currentTarget).select('circle');
+        const wasSelected = circle.classed('graph-circle-selected');
+        nodeEl.selectAll('circle').classed('graph-circle-selected', false);
+        if (wasSelected) {
+          hidePanel();
+        } else {
+          circle.classed('graph-circle-selected', true);
+          showPanel(d);
+        }
+      });
 
     nodeEl.append('circle').attr('r', R)
       .attr('class', d => 'graph-circle' + (d.active ? ' graph-circle-active' : ''));
@@ -607,9 +667,8 @@ const GraphViz = (() => {
       .text(d => d.sub);
 
     sim.on('tick', () => {
-      // clamp nodes within the SVG bounds
       nodes.forEach(d => {
-        d.x = Math.max(92, Math.min(W - 92, d.x));
+        d.x = Math.max(96, Math.min(W - 96, d.x));
         d.y = Math.max(R + 10, Math.min(H - R - 35, d.y));
       });
       const setEdge = sel => sel
@@ -619,6 +678,42 @@ const GraphViz = (() => {
       setEdge(hitEl);
       nodeEl.attr('transform', d => `translate(${d.x},${d.y})`);
     });
+
+    // close panel when clicking outside graph or panel
+    document.addEventListener('click', ev => {
+      if (!ev.target.closest('#story-graph') && !ev.target.closest('#node-panel')) {
+        nodeEl.selectAll('circle').classed('graph-circle-selected', false);
+        hidePanel();
+      }
+    });
+
+    const closeBtn = document.querySelector('.node-panel-close');
+    if (closeBtn) {
+      closeBtn.addEventListener('click', () => {
+        nodeEl.selectAll('circle').classed('graph-circle-selected', false);
+        hidePanel();
+      });
+    }
+  }
+
+  function showPanel(d) {
+    const panel = document.getElementById('node-panel');
+    if (!panel) return;
+    panel.querySelector('.node-panel-title').textContent = d.panelTitle;
+    panel.querySelector('.node-panel-dates').textContent = d.panelDates;
+    let html = d.content ? `<p>${d.content}</p>` : '';
+    if (d.links && d.links.length) {
+      html += `<ul class="story-links">${d.links.map(l =>
+        `<li><a href="${l.href}" target="_blank" rel="noopener">${l.text}</a></li>`
+      ).join('')}</ul>`;
+    }
+    panel.querySelector('.node-panel-body').innerHTML = html;
+    panel.classList.add('open');
+  }
+
+  function hidePanel() {
+    const panel = document.getElementById('node-panel');
+    if (panel) panel.classList.remove('open');
   }
 
   function placeTooltip(ev, wrap, tooltip) {

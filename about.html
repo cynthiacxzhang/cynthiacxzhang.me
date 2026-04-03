@@ -24,78 +24,22 @@
     </div>
   </nav>
 
-  <section style="border-top: none;">
+  <section style="border-top: none; padding-bottom: 40px;">
     <div class="container">
       <p class="section-label">my story</p>
-
-      <div id="story-graph" class="story-graph-wrap"></div>
-      <p class="graph-hint">hover edges to trace connections · drag nodes to rearrange</p>
-
-      <p class="story-links-label">// national team</p>
-      <ul class="story-links">
-        <li><a href="https://youtu.be/RSqaEIa58dQ?t=9" target="_blank" rel="noopener">↗ competition in greece
-            (video)</a></li>
-        <li><a href="https://ottawasportspages.ca/2018/04/13/kanata-gymnasts-find-rhythm-abroad/" target="_blank"
-            rel="noopener">↗ kanata gymnasts find rhythm abroad (2018)</a></li>
-      </ul>
-
-      <div class="story-body">
-        <details class="story-accordion">
-          <summary class="story-summary">// where it started</summary>
-          <div class="story-accordion-content">
-            <p>I never planned to be an engineer. For six years, I led my high school's Model UN team, where I spent a
-              lot of time working on technology-related proposals for the UN General Assembly. The problems were often
-              clear, but I kept running into the same frustration: I could explain what needed to happen, but I didn’t
-              yet have the tools to build it myself. That gap is what pulled me toward computer engineering.
-            </p>
+    </div>
+    <div id="story-graph" class="story-graph-wrap"></div>
+    <div class="container">
+      <p class="graph-hint">hover edges to trace connections · click nodes to explore</p>
+      <div id="node-panel" class="node-panel">
+        <div class="node-panel-header">
+          <div class="node-panel-meta">
+            <span class="node-panel-title"></span>
+            <span class="node-panel-dates"></span>
           </div>
-        </details>
-
-        <details class="story-accordion">
-          <summary class="story-summary">// a deeper dive</summary>
-          <div class="story-accordion-content">
-            <p>Once I got there, I realized I was interested in more than just building systems. I wanted to understand
-              what those systems were actually doing, especially when they were meant to model human intelligence. That
-              led me to double minor in psychology and cognitive science, where I started thinking more seriously about
-              how intelligence works in humans and how it gets represented in machines.
-            </p>
-          </div>
-        </details>
-
-        <details class="story-accordion">
-          <summary class="story-summary">// personal exploration</summary>
-          <div class="story-accordion-content">
-            <p>This curiosity carried over to my work at the University of Waterloo's <a
-                href="https://uwaterloo.ca/trust-network/" target="_blank">TRuST
-                Network</a>, where I studied how inductive reasoning and overgeneralization affect model performance on
-              statistical minority groups. I was
-              interested in how those failure modes could be made visible in ways that were useful beyond the technical
-              side. Outside of academia, the internships I pursued shifted my focus to deployment. <br>Most notably, at
-              RBC
-              Borealis, I worked on a
-              project that exposes a high-profile financial dataset to 17k employees through an agentic interface, where
-              I was
-              able to observe how machine intelligence often falls short of replicating or augmenting human intelligence
-              in a real-world setting, and how this minute gap can have significant consequences. <br>This begs the
-              question: how can we advance machine intelligence in a way that is both technically advanced and
-              human-centric?
-            </p>
-          </div>
-        </details>
-
-        <details class="story-accordion">
-          <summary class="story-summary">// bridging everything</summary>
-          <div class="story-accordion-content">
-            <p>Being part of the <a href="https://www.ipc.on.ca/" target="_blank">IPC</a>'s advisory body made made the
-              policy side harder to ignore. In working on the IPC's AI and privacy policy, including drafting the
-              Charter on Digital Security in secondary schoolsI saw
-              how governance moves at a pace slower than the systems being regulated. This gap made it difficult to
-              separate my technical work from its broader effects in practice. <br>The intersection of intelligence --
-              both machine and human -- will continue to be the driving force of my career trajectory.
-            </p>
-          </div>
-        </details>
-
+          <button class="node-panel-close" aria-label="Close">×</button>
+        </div>
+        <div class="node-panel-body"></div>
       </div>
     </div>
   </section>
