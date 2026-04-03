@@ -586,13 +586,18 @@ const GraphViz = (() => {
       story: 'Understanding the regulatory framework before building inside it.' },
   ];
 
-  function init() {
-    const wrap = document.getElementById('story-graph');
-    if (!wrap || typeof d3 === 'undefined') return;
+  // shared refs so showPanel/positionPanel can access them
+  let _wrap, _svgEl, _W, _H, _R, _nodeEl;
 
-    const W = document.documentElement.clientWidth;
-    const H = Math.max(600, window.innerHeight * 0.75);
-    const R = 30;
+  function init() {
+    _wrap = document.getElementById('story-graph');
+    if (!_wrap || typeof d3 === 'undefined') return;
+
+    const wrap = _wrap;
+    _W = document.documentElement.clientWidth;
+    _H = Math.max(600, window.innerHeight * 0.75);
+    _R = 30;
+    const W = _W, H = _H, R = _R;
 
     // seed initial positions spread across the SVG so nodes don't all spawn at center
     const initPos = {
@@ -608,7 +613,7 @@ const GraphViz = (() => {
     }));
     const links = LINKS.map(l => ({ ...l }));
 
-    const svg = d3.select(wrap).append('svg')
+    const svg = d3.select(wrap).append('svg');
       .attr('width', '100%')
       .attr('viewBox', `0 0 ${W} ${H}`)
       .attr('preserveAspectRatio', 'xMidYMid meet');
@@ -619,6 +624,17 @@ const GraphViz = (() => {
       .force('center', d3.forceCenter(W / 2, H / 2))
       .force('collide', d3.forceCollide(90))
       .alphaDecay(0.015);
+
+    _svgEl = svg.node();
+
+    // transparent background rect — clicking empty graph area closes the panel
+    svg.append('rect').attr('width', W).attr('height', H)
+      .attr('fill', 'transparent')
+      .style('cursor', 'default')
+      .on('click', () => {
+        _nodeEl.selectAll('circle').classed('graph-circle-selected', false);
+        hidePanel();
+      });
 
     const tooltip = d3.select(wrap).append('div')
       .attr('class', 'graph-tooltip')
@@ -646,7 +662,7 @@ const GraphViz = (() => {
       });
 
     // nodes
-    const nodeEl = svg.append('g').attr('class', 'g-nodes')
+    const nodeEl = _nodeEl = svg.append('g').attr('class', 'g-nodes')
       .selectAll('g').data(nodes).join('g')
       .attr('class', 'graph-node')
       .call(d3.drag()
@@ -708,7 +724,8 @@ const GraphViz = (() => {
 
   function showPanel(d) {
     const panel = document.getElementById('node-panel');
-    if (!panel) return;
+    if (!panel || !_svgEl || !_wrap) return;
+
     panel.querySelector('.node-panel-title').textContent = d.panelTitle;
     panel.querySelector('.node-panel-dates').textContent = d.panelDates;
     let html = d.content ? `<p>${d.content}</p>` : '';
@@ -719,6 +736,34 @@ const GraphViz = (() => {
     }
     panel.querySelector('.node-panel-body').innerHTML = html;
     panel.classList.add('open');
+    positionPanel(d, panel);
+  }
+
+  function positionPanel(d, panel) {
+    const svgRect = _svgEl.getBoundingClientRect();
+    const wrapRect = _wrap.getBoundingClientRect();
+    const scaleX = svgRect.width / _W;
+    const scaleY = svgRect.height / _H;
+
+    // node center relative to wrap
+    const nx = d.x * scaleX + (svgRect.left - wrapRect.left);
+    const ny = d.y * scaleY + (svgRect.top - wrapRect.top);
+
+    const panelW = panel.offsetWidth || 260;
+    const panelH = panel.offsetHeight || 160;
+    const gap = _R * scaleX + 14;
+
+    // prefer right side, fall back to left
+    let left = nx + gap;
+    if (left + panelW > _wrap.offsetWidth - 8) left = nx - gap - panelW;
+    left = Math.max(8, left);
+
+    // center vertically on node, clamp within wrap
+    let top = ny - panelH / 2;
+    top = Math.max(8, Math.min(_wrap.offsetHeight - panelH - 8, top));
+
+    panel.style.left = left + 'px';
+    panel.style.top  = top  + 'px';
   }
 
   function hidePanel() {

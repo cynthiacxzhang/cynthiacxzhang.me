@@ -994,7 +994,7 @@ footer span {
 .graph-hint {
   font-size: 11px;
   color: var(--text-dim);
-  margin-bottom: 28px;
+  margin-bottom: 0;
 }
 
 .graph-hint::before {
@@ -1087,22 +1087,25 @@ footer span {
 /* --- node panel --- */
 
 .node-panel {
+  position: absolute;
+  width: 260px;
   display: none;
-  margin-top: 16px;
   border: 1px solid var(--border);
   border-radius: 4px;
-  background: var(--surface);
+  background: var(--bg);
+  box-shadow: 0 4px 20px rgba(0,0,0,0.09);
   overflow: hidden;
+  z-index: 20;
 }
 
 .node-panel.open {
   display: block;
-  animation: panel-in 0.18s ease;
+  animation: panel-in 0.15s ease;
 }
 
 @keyframes panel-in {
-  from { opacity: 0; transform: translateY(6px); }
-  to   { opacity: 1; transform: translateY(0); }
+  from { opacity: 0; transform: scale(0.97); }
+  to   { opacity: 1; transform: scale(1); }
 }
 
 .node-panel-header {
