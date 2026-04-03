@@ -376,6 +376,39 @@ section {
   color: var(--text);
 }
 
+/* --- contact section focus --- */
+
+#contact {
+  min-height: calc(100vh - 57px); /* viewport minus nav */
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  scroll-margin-top: 57px;
+}
+
+#contact .container {
+  width: 100%;
+}
+
+body.contact-active section:not(#contact) {
+  opacity: 0.04;
+  pointer-events: none;
+  transition: opacity 0.5s ease;
+}
+
+body.contact-active footer {
+  opacity: 0.04;
+  transition: opacity 0.5s ease;
+}
+
+section:not(#contact) {
+  transition: opacity 0.5s ease;
+}
+
+footer {
+  transition: opacity 0.5s ease;
+}
+
 /* --- contact --- */
 
 .contact-list {
@@ -1171,18 +1204,73 @@ footer span {
 
 /* --- responsive --- */
 
-@media (max-width: 520px) {
+@media (max-width: 640px) {
 
-  .skills-grid,
-  .trivia {
-    grid-template-columns: 1fr;
+  /* nav */
+  nav {
+    padding: 12px 0;
+  }
+
+  nav ul {
+    gap: 14px;
+  }
+
+  nav ul a {
+    font-size: 12px;
+  }
+
+  /* hero */
+  .hero {
+    padding: 32px 0 16px;
   }
 
   .hero h1 {
     font-size: 22px;
   }
 
-  nav ul {
-    gap: 16px;
+  /* sections */
+  section {
+    padding: 36px 0;
+  }
+
+  /* grids → single column */
+  .skills-grid,
+  .trivia {
+    grid-template-columns: 1fr;
+  }
+
+  /* graph labels — sub-text hidden to reduce clutter */
+  .graph-sub {
+    display: none;
+  }
+
+  .graph-label {
+    font-size: 10px;
+  }
+
+  /* node panel — bottom sheet on mobile */
+  .node-panel {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    top: auto;
+    width: 100%;
+    max-height: 60vh;
+    border-radius: 12px 12px 0 0;
+    border-left: none;
+    border-right: none;
+    border-bottom: none;
+    overflow-y: auto;
+    z-index: 200;
+  }
+
+  @keyframes panel-in {
+    from { opacity: 0; transform: translateY(16px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  /* tooltip — disabled on touch, hide it */
+  .graph-tooltip {
+    display: none;
   }
 }

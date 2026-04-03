@@ -510,9 +510,9 @@ const Blog = (() => {
 const GraphViz = (() => {
   const NODES = [
     {
-      id: 'gym', label: 'National Team', sub: '2010–2022', active: false,
+      id: 'gym', label: 'National Team', sub: '2010-2022', active: false,
       panelTitle: 'Canadian National Team',
-      panelDates: 'Rhythmic Gymnastics · 2010–2022',
+      panelDates: 'Rhythmic Gymnastics · 2010-2022',
       content: '12 years on the Canadian senior national team. Discipline, iterative improvement, and performing under pressure — the kind of training that doesn\'t have a defined endpoint.',
       links: [
         { href: 'https://youtu.be/RSqaEIa58dQ?t=9', text: '↗ competition in greece (video)' },
@@ -526,10 +526,10 @@ const GraphViz = (() => {
       content: 'I never planned to be an engineer. For six years, I led my high school\'s Model UN team, where I spent a lot of time working on technology-related proposals for the UN General Assembly. The problems were often clear, but I kept running into the same frustration: I could explain what needed to happen, but I didn\'t yet have the tools to build it myself. That gap is what pulled me toward computer engineering.',
     },
     {
-      id: 'uw', label: 'U of Waterloo', sub: '2022–now', active: true,
+      id: 'uw', label: 'U of Waterloo', sub: '2022-now', active: true,
       panelTitle: 'University of Waterloo',
-      panelDates: 'Computer Engineering · 2022–now',
-      content: 'Once I got there, I realized I was interested in more than just building systems. I wanted to understand what those systems were actually doing, especially when they were meant to model human intelligence. That led me to double minor in psychology and cognitive science, where I started thinking more seriously about how intelligence works in humans and how it gets represented in machines.',
+      panelDates: 'Computer Engineering · 2022-now',
+      content: 'Over my 3 years in university, I realized I was interested in more than just building systems. I wanted to understand what those systems were actually doing, especially when they were meant to model human intelligence. That led me to double minor in psychology and cognitive science, where I started thinking more seriously about how intelligence works in humans and how it gets represented in machines.',
     },
     {
       id: 'rbc', label: 'RBC Borealis', sub: '2023', active: false,
@@ -538,13 +538,13 @@ const GraphViz = (() => {
       content: 'Outside of academia, my internships shifted my focus to deployment. At RBC Borealis, I worked on a project that exposes a high-profile financial dataset to 17k employees through an agentic interface. I observed how machine intelligence often falls short of replicating or augmenting human intelligence in a real-world setting — and how this gap can have significant consequences.',
     },
     {
-      id: 'trust', label: 'TRuST Network', sub: '2024–now', active: true,
+      id: 'trust', label: 'TRuST Network', sub: '2024-now', active: true,
       panelTitle: 'Where AI Meets Humans',
-      panelDates: 'TRuST Network, Waterloo · 2024–now',
+      panelDates: 'TRuST Network, Waterloo · 2024-now',
       content: 'At the University of Waterloo\'s TRuST Network, I studied how inductive reasoning and overgeneralization affect model performance on statistical minority groups. I was interested in how those failure modes could be made visible in ways that were useful beyond the technical side — legible to policymakers and practitioners, not just researchers.',
     },
     {
-      id: 'ipc', label: 'IPC Ontario', sub: '2024–now', active: true,
+      id: 'ipc', label: 'IPC Ontario', sub: '2024-now', active: true,
       panelTitle: 'Regulating Innovation',
       panelDates: 'IPC Ontario · 2024–now',
       content: 'Being part of the IPC\'s advisory body made the policy side harder to ignore. In working on the IPC\'s AI and privacy policy — including drafting the Charter on Digital Security in secondary schools — I saw how governance moves at a pace slower than the systems being regulated. That gap made it difficult to separate my technical work from its broader effects in practice.',
@@ -558,32 +558,58 @@ const GraphViz = (() => {
   ];
 
   const LINKS = [
-    { source: 'gym',   target: 'mun',
-      story: '12 years competing under pressure made sustained leadership feel natural. The same discipline that held a routine together held a delegation together.' },
-    { source: 'gym',   target: 'uw',
-      story: 'Iterative improvement without a defined endpoint — training and engineering share the same loop.' },
-    { source: 'mun',   target: 'uw',
-      story: 'Six years explaining what technology should do without being able to build it. The frustration became the motivation.' },
-    { source: 'mun',   target: 'ipc',
-      story: 'Writing technology-adjacent resolutions for the UN GA was an early lesson in how governance frameworks get made — and where they fall short.' },
-    { source: 'mun',   target: 'trust',
-      story: 'Translating technical findings into language that moves policy started in committee rooms, not research labs.' },
-    { source: 'uw',    target: 'rbc',
-      story: 'First contact with production ML: what does it actually take to deploy an agent in a system where a hallucination is a liability?' },
-    { source: 'uw',    target: 'trust',
-      story: 'The cogsci minor sharpened the question — not just how models fail, but which groups bear the cost of those failures.' },
-    { source: 'rbc',   target: 'trust',
-      story: 'Seeing real failure modes made abstract fairness metrics concrete. The gap between benchmark performance and production behaviour is where it gets serious.' },
-    { source: 'trust', target: 'ipc',
-      story: 'Research on minority group performance degradation found its audience: policymakers who needed technical failures made legible.' },
-    { source: 'uw',    target: 'ws',
-      story: 'The technical foundation for working at the intersection of ML and financial systems.' },
-    { source: 'rbc',   target: 'ws',
-      story: 'Production financial AI at scale — the infrastructure patterns carry over, the stakes scale up.' },
-    { source: 'trust', target: 'ws',
-      story: 'Fairness in financial ML is where the academic question meets real user impact.' },
-    { source: 'ipc',   target: 'ws',
-      story: 'Understanding the regulatory framework before building inside it.' },
+    {
+      source: 'gym', target: 'mun',
+      story: '12 years competing under pressure made sustained leadership feel natural. The same discipline that held a routine together held a delegation together.'
+    },
+    {
+      source: 'gym', target: 'uw',
+      story: 'Iterative improvement without a defined endpoint — training and engineering share the same loop.'
+    },
+    {
+      source: 'mun', target: 'uw',
+      story: 'Six years explaining what technology should do without being able to build it. The frustration became the motivation.'
+    },
+    {
+      source: 'mun', target: 'ipc',
+      story: 'Writing technology-adjacent resolutions for the UN GA was an early lesson in how governance frameworks get made — and where they fall short.'
+    },
+    {
+      source: 'mun', target: 'trust',
+      story: 'Translating technical findings into language that moves policy started in committee rooms, not research labs.'
+    },
+    {
+      source: 'uw', target: 'rbc',
+      story: 'First contact with production ML: what does it actually take to deploy an agent in a system where a hallucination is a liability?'
+    },
+    {
+      source: 'uw', target: 'trust',
+      story: 'The cogsci minor sharpened the question — not just how models fail, but which groups bear the cost of those failures.'
+    },
+    {
+      source: 'rbc', target: 'trust',
+      story: 'Seeing real failure modes made abstract fairness metrics concrete. The gap between benchmark performance and production behaviour is where it gets serious.'
+    },
+    {
+      source: 'trust', target: 'ipc',
+      story: 'Research on minority group performance degradation found its audience: policymakers who needed technical failures made legible.'
+    },
+    {
+      source: 'uw', target: 'ws',
+      story: 'The technical foundation for working at the intersection of ML and financial systems.'
+    },
+    {
+      source: 'rbc', target: 'ws',
+      story: 'Production financial AI at scale — the infrastructure patterns carry over, the stakes scale up.'
+    },
+    {
+      source: 'trust', target: 'ws',
+      story: 'Fairness in financial ML is where the academic question meets real user impact.'
+    },
+    {
+      source: 'ipc', target: 'ws',
+      story: 'Understanding the regulatory framework before building inside it.'
+    },
   ];
 
   // shared refs so showPanel/positionPanel can access them
@@ -594,17 +620,29 @@ const GraphViz = (() => {
     if (!_wrap || typeof d3 === 'undefined') return;
 
     const wrap = _wrap;
+    const isMobile = window.innerWidth < 640;
     _W = document.documentElement.clientWidth;
-    _H = Math.max(600, window.innerHeight * 0.75);
-    _R = 30;
+    _H = isMobile ? Math.max(380, window.innerHeight * 0.55) : Math.max(600, window.innerHeight * 0.75);
+    _R = isMobile ? 18 : 30;
     const W = _W, H = _H, R = _R;
+
+    const linkDist = isMobile ? 110 : 260;
+    const charge = isMobile ? -280 : -700;
+    const collide = isMobile ? 50 : 90;
+    const xPad = isMobile ? 60 : 110;
+
+    // update hint text for touch devices
+    if (isMobile) {
+      const hint = document.querySelector('.graph-hint');
+      if (hint) hint.textContent = 'tap nodes to explore';
+    }
 
     // seed initial positions spread across the SVG so nodes don't all spawn at center
     const initPos = {
-      gym:   [0.18, 0.15], mun:   [0.12, 0.50],
-      uw:    [0.45, 0.22], rbc:   [0.22, 0.78],
-      trust: [0.72, 0.32], ipc:   [0.82, 0.65],
-      ws:    [0.52, 0.82],
+      gym: [0.18, 0.15], mun: [0.12, 0.50],
+      uw: [0.45, 0.22], rbc: [0.22, 0.78],
+      trust: [0.72, 0.32], ipc: [0.82, 0.65],
+      ws: [0.52, 0.82],
     };
     const nodes = NODES.map(n => ({
       ...n,
@@ -619,10 +657,10 @@ const GraphViz = (() => {
       .attr('preserveAspectRatio', 'xMidYMid meet');
 
     const sim = d3.forceSimulation(nodes)
-      .force('link', d3.forceLink(links).id(d => d.id).distance(260).strength(0.5))
-      .force('charge', d3.forceManyBody().strength(-700))
+      .force('link', d3.forceLink(links).id(d => d.id).distance(linkDist).strength(0.5))
+      .force('charge', d3.forceManyBody().strength(charge))
       .force('center', d3.forceCenter(W / 2, H / 2))
-      .force('collide', d3.forceCollide(90))
+      .force('collide', d3.forceCollide(collide))
       .alphaDecay(0.015);
 
     _svgEl = svg.node();
@@ -667,8 +705,8 @@ const GraphViz = (() => {
       .attr('class', 'graph-node')
       .call(d3.drag()
         .on('start', (ev, d) => { if (!ev.active) sim.alphaTarget(0.3).restart(); d.fx = d.x; d.fy = d.y; })
-        .on('drag',  (ev, d) => { d.fx = ev.x; d.fy = ev.y; })
-        .on('end',   (ev, d) => { if (!ev.active) sim.alphaTarget(0); d.fx = null; d.fy = null; })
+        .on('drag', (ev, d) => { d.fx = ev.x; d.fy = ev.y; })
+        .on('end', (ev, d) => { if (!ev.active) sim.alphaTarget(0); d.fx = null; d.fy = null; })
       )
       .on('click', (ev, d) => {
         ev.stopPropagation();
@@ -694,7 +732,7 @@ const GraphViz = (() => {
 
     sim.on('tick', () => {
       nodes.forEach(d => {
-        d.x = Math.max(110, Math.min(W - 110, d.x));
+        d.x = Math.max(xPad, Math.min(W - xPad, d.x));
         d.y = Math.max(R + 8, Math.min(H - R - 8, d.y));
       });
       const setEdge = sel => sel
@@ -735,11 +773,16 @@ const GraphViz = (() => {
       ).join('')}</ul>`;
     }
     panel.querySelector('.node-panel-body').innerHTML = html;
+    if (window.innerWidth < 640) {
+      panel.style.left = '';
+      panel.style.top = '';
+    }
     panel.classList.add('open');
     positionPanel(d, panel);
   }
 
   function positionPanel(d, panel) {
+    if (window.innerWidth < 640) return; // mobile: CSS fixed bottom sheet handles it
     const svgRect = _svgEl.getBoundingClientRect();
     const wrapRect = _wrap.getBoundingClientRect();
     const scaleX = svgRect.width / _W;
@@ -763,7 +806,7 @@ const GraphViz = (() => {
     top = Math.max(8, Math.min(_wrap.offsetHeight - panelH - 8, top));
 
     panel.style.left = left + 'px';
-    panel.style.top  = top  + 'px';
+    panel.style.top = top + 'px';
   }
 
   function hidePanel() {
@@ -783,6 +826,26 @@ const GraphViz = (() => {
       if (y + th > wrap.offsetHeight - 8) y -= th + 28;
     }
     tooltip.style('left', x + 'px').style('top', y + 'px');
+  }
+
+  return { init };
+})();
+
+
+// ---------- contact focus effect ----------
+
+const ContactFocus = (() => {
+  function init() {
+    const contact = document.getElementById('contact');
+    if (!contact) return;
+
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        document.body.classList.toggle('contact-active', entry.isIntersecting);
+      });
+    }, { threshold: 0.3 });
+
+    observer.observe(contact);
   }
 
   return { init };
@@ -832,6 +895,7 @@ document.addEventListener('DOMContentLoaded', () => {
   NavHighlight.init();
   TriviaInteraction.init();
   CommandPalette.init();
+  ContactFocus.init();
   ContactForm.init();
   WorkExperiences.init();
   WorkOverview.init();
