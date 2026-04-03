@@ -49,7 +49,7 @@ a:hover {
 /* --- layout --- */
 
 .container {
-  max-width: 840px;
+  max-width: 780px;
   margin: 0 auto;
   padding: 0 24px;
 }
