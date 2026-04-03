@@ -613,7 +613,7 @@ const GraphViz = (() => {
     }));
     const links = LINKS.map(l => ({ ...l }));
 
-    const svg = d3.select(wrap).append('svg');
+    const svg = d3.select(wrap).append('svg')
       .attr('width', '100%')
       .attr('viewBox', `0 0 ${W} ${H}`)
       .attr('preserveAspectRatio', 'xMidYMid meet');
