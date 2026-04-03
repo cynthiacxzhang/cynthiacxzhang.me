@@ -832,6 +832,34 @@ const GraphViz = (() => {
 })();
 
 
+// ---------- sidebar nav ----------
+
+const SidebarNav = (() => {
+  function init() {
+    const sidebar = document.getElementById('sidebarNav');
+    if (!sidebar) return;
+
+    const links = sidebar.querySelectorAll('a[data-section]');
+
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          const id = entry.target.id;
+          links.forEach(l => l.classList.toggle('active', l.dataset.section === id));
+        }
+      });
+    }, { rootMargin: '-40% 0px -60% 0px' });
+
+    links.forEach(l => {
+      const section = document.getElementById(l.dataset.section);
+      if (section) observer.observe(section);
+    });
+  }
+
+  return { init };
+})();
+
+
 // ---------- contact focus effect ----------
 
 const ContactFocus = (() => {
@@ -908,6 +936,7 @@ document.addEventListener('DOMContentLoaded', () => {
   NavHighlight.init();
   TriviaInteraction.init();
   CommandPalette.init();
+  SidebarNav.init();
   ContactFocus.init();
   ContactForm.init();
   WorkExperiences.init();
