@@ -837,7 +837,20 @@ const GraphViz = (() => {
 const ContactFocus = (() => {
   function init() {
     const contact = document.getElementById('contact');
+    const hero = document.querySelector('.hero');
+    const downHint = document.getElementById('scrollHintDown');
     if (!contact) return;
+
+    // fade in the down-hint only after scrolling past the hero
+    if (hero && downHint) {
+      const heroObserver = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          downHint.style.opacity = entry.isIntersecting ? '0' : '';
+          downHint.style.transition = 'opacity 0.5s ease';
+        });
+      }, { threshold: 0.2 });
+      heroObserver.observe(hero);
+    }
 
     const observer = new IntersectionObserver((entries) => {
       entries.forEach(entry => {
