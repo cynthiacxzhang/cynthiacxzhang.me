@@ -27,7 +27,9 @@
       "Bash(uv:*)",
       "Bash(pip3 show:*)",
       "WebFetch(domain:pypi.org)",
-      "WebFetch(domain:github.com)"
+      "WebFetch(domain:github.com)",
+      "Bash(git pull:*)",
+      "Bash(git stash:*)"
     ]
   }
 }
