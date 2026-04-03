@@ -127,14 +127,14 @@ nav ul a.active {
   margin-top: 12px;
 }
 
-.hero .currently-exploring {
+.currently-exploring {
   color: var(--accent-dim);
   font-size: 13px;
-  margin-top: 20px;
+  margin-top: 24px;
   margin-bottom: 4px;
 }
 
-.hero .currently-exploring::before {
+.currently-exploring::before {
   content: "# ";
 }
 

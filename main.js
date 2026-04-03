@@ -591,8 +591,8 @@ const GraphViz = (() => {
     if (!wrap || typeof d3 === 'undefined') return;
 
     const W = document.documentElement.clientWidth;
-    const H = 520;
-    const R = 20;
+    const H = 900;
+    const R = 26;
 
     // clone so D3 can mutate freely
     const nodes = NODES.map(n => ({ ...n }));
@@ -604,11 +604,11 @@ const GraphViz = (() => {
       .attr('preserveAspectRatio', 'xMidYMid meet');
 
     const sim = d3.forceSimulation(nodes)
-      .force('link', d3.forceLink(links).id(d => d.id).distance(180).strength(0.6))
-      .force('charge', d3.forceManyBody().strength(-420))
+      .force('link', d3.forceLink(links).id(d => d.id).distance(260).strength(0.5))
+      .force('charge', d3.forceManyBody().strength(-700))
       .force('center', d3.forceCenter(W / 2, H / 2))
-      .force('collide', d3.forceCollide(72))
-      .alphaDecay(0.02);
+      .force('collide', d3.forceCollide(90))
+      .alphaDecay(0.015);
 
     const tooltip = d3.select(wrap).append('div')
       .attr('class', 'graph-tooltip')
@@ -660,16 +660,16 @@ const GraphViz = (() => {
     nodeEl.append('circle').attr('r', R)
       .attr('class', d => 'graph-circle' + (d.active ? ' graph-circle-active' : ''));
 
-    nodeEl.append('text').attr('class', 'graph-label').attr('text-anchor', 'middle').attr('dy', R + 15)
+    nodeEl.append('text').attr('class', 'graph-label').attr('text-anchor', 'middle').attr('dy', R + 18)
       .text(d => d.label);
 
-    nodeEl.append('text').attr('class', 'graph-sub').attr('text-anchor', 'middle').attr('dy', R + 28)
+    nodeEl.append('text').attr('class', 'graph-sub').attr('text-anchor', 'middle').attr('dy', R + 33)
       .text(d => d.sub);
 
     sim.on('tick', () => {
       nodes.forEach(d => {
-        d.x = Math.max(96, Math.min(W - 96, d.x));
-        d.y = Math.max(R + 10, Math.min(H - R - 35, d.y));
+        d.x = Math.max(110, Math.min(W - 110, d.x));
+        d.y = Math.max(R + 16, Math.min(H - R - 50, d.y));
       });
       const setEdge = sel => sel
         .attr('x1', d => d.source.x).attr('y1', d => d.source.y)
