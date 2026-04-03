@@ -28,57 +28,10 @@
     <div class="container">
       <p class="section-label">my story</p>
 
-      <div class="timeline">
-        <div class="tl-item">
-          <span class="tl-year">2010 – 2022</span>
-          <div class="tl-dot"></div>
-          <div class="tl-body">
-            <span class="tl-title">Canadian National Team</span>
-            <span class="tl-sub">Rhythmic Gymnastics · 12 years</span>
-          </div>
-        </div>
-        <div class="tl-item">
-          <span class="tl-year">2016 – 2022</span>
-          <div class="tl-dot"></div>
-          <div class="tl-body">
-            <span class="tl-title">Model UN</span>
-            <span class="tl-sub">founder &amp; delegate · UN General Assembly</span>
-          </div>
-        </div>
-        <div class="tl-item">
-          <span class="tl-year">2022 – now</span>
-          <div class="tl-dot tl-dot-active"></div>
-          <div class="tl-body">
-            <span class="tl-title">University of Waterloo</span>
-            <span class="tl-sub">Computer Engineering · minor: cogsci, psych</span>
-          </div>
-        </div>
-        <div class="tl-item">
-          <span class="tl-year">2023</span>
-          <div class="tl-dot"></div>
-          <div class="tl-body">
-            <span class="tl-title">RBC Borealis</span>
-            <span class="tl-sub">AI in regulated financial systems</span>
-          </div>
-        </div>
-        <div class="tl-item">
-          <span class="tl-year">2024 – now</span>
-          <div class="tl-dot tl-dot-active"></div>
-          <div class="tl-body">
-            <span class="tl-title">TRuST Network, Waterloo</span>
-            <span class="tl-sub">model fairness · AI literacy research</span>
-          </div>
-        </div>
-        <div class="tl-item">
-          <span class="tl-year">2024 – now</span>
-          <div class="tl-dot tl-dot-active"></div>
-          <div class="tl-body">
-            <span class="tl-title">IPC Ontario</span>
-            <span class="tl-sub">AI &amp; privacy policy advisor</span>
-          </div>
-        </div>
-      </div>
+      <div id="story-graph" class="story-graph-wrap"></div>
+      <p class="graph-hint">hover edges to trace connections · drag nodes to rearrange</p>
 
+      <p class="story-links-label">// national team</p>
       <ul class="story-links">
         <li><a href="https://youtu.be/RSqaEIa58dQ?t=9" target="_blank" rel="noopener">↗ competition in greece
             (video)</a></li>
@@ -153,6 +106,7 @@
     </div>
   </footer>
 
+  <script src="https://cdn.jsdelivr.net/npm/d3@7/dist/d3.min.js"></script>
   <script src="main.js"></script>
 
 </body>

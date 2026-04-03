@@ -505,6 +505,140 @@ const Blog = (() => {
 })();
 
 
+// ---------- story graph (about.html) ----------
+
+const GraphViz = (() => {
+  const NODES = [
+    { id: 'gym',   label: 'National Team',  sub: '2010–2022', active: false },
+    { id: 'mun',   label: 'Model UN',        sub: '2016–2022', active: false },
+    { id: 'uw',    label: 'U of Waterloo',   sub: '2022–now',  active: true  },
+    { id: 'rbc',   label: 'RBC Borealis',    sub: '2023',      active: false },
+    { id: 'trust', label: 'TRuST Network',   sub: '2024–now',  active: true  },
+    { id: 'ipc',   label: 'IPC Ontario',     sub: '2024–now',  active: true  },
+  ];
+
+  const LINKS = [
+    { source: 'gym',   target: 'mun',
+      story: '12 years competing under pressure made sustained leadership feel natural. The same discipline that held a routine together held a delegation together.' },
+    { source: 'gym',   target: 'uw',
+      story: 'Iterative improvement without a defined endpoint — training and engineering share the same loop.' },
+    { source: 'mun',   target: 'uw',
+      story: 'Six years explaining what technology should do without being able to build it. The frustration became the motivation.' },
+    { source: 'mun',   target: 'ipc',
+      story: 'Writing technology-adjacent resolutions for the UN GA was an early lesson in how governance frameworks get made — and where they fall short.' },
+    { source: 'mun',   target: 'trust',
+      story: 'Translating technical findings into language that moves policy started in committee rooms, not research labs.' },
+    { source: 'uw',    target: 'rbc',
+      story: 'First contact with production ML: what does it actually take to deploy an agent in a system where a hallucination is a liability?' },
+    { source: 'uw',    target: 'trust',
+      story: 'The cogsci minor sharpened the question — not just how models fail, but which groups bear the cost of those failures.' },
+    { source: 'rbc',   target: 'trust',
+      story: 'Seeing real failure modes made abstract fairness metrics concrete. The gap between benchmark performance and production behaviour is where it gets serious.' },
+    { source: 'trust', target: 'ipc',
+      story: 'Research on minority group performance degradation found its audience: policymakers who needed technical failures made legible.' },
+  ];
+
+  function init() {
+    const wrap = document.getElementById('story-graph');
+    if (!wrap || typeof d3 === 'undefined') return;
+
+    const W = wrap.offsetWidth || 730;
+    const H = 400;
+    const R = 20;
+
+    // clone so D3 can mutate freely
+    const nodes = NODES.map(n => ({ ...n }));
+    const links = LINKS.map(l => ({ ...l }));
+
+    const svg = d3.select(wrap).append('svg')
+      .attr('width', '100%')
+      .attr('viewBox', `0 0 ${W} ${H}`)
+      .attr('preserveAspectRatio', 'xMidYMid meet');
+
+    const sim = d3.forceSimulation(nodes)
+      .force('link', d3.forceLink(links).id(d => d.id).distance(160).strength(0.7))
+      .force('charge', d3.forceManyBody().strength(-380))
+      .force('center', d3.forceCenter(W / 2, H / 2))
+      .force('collide', d3.forceCollide(68))
+      .alphaDecay(0.02);
+
+    const tooltip = d3.select(wrap).append('div')
+      .attr('class', 'graph-tooltip')
+      .style('opacity', 0);
+
+    // visual edges
+    const linkEl = svg.append('g').attr('class', 'g-links')
+      .selectAll('line').data(links).join('line')
+      .attr('class', 'graph-edge');
+
+    // wide invisible hit area for easy hovering
+    const hitEl = svg.append('g').attr('class', 'g-hits')
+      .selectAll('line').data(links).join('line')
+      .attr('class', 'graph-edge-hit')
+      .on('mouseover', (ev, d) => {
+        linkEl.filter(l => l === d).classed('graph-edge-active', true);
+        tooltip.style('opacity', 1)
+          .html(`<div class="gt-conn">${d.source.label} → ${d.target.label}</div><div class="gt-story">${d.story}</div>`);
+        placeTooltip(ev, wrap, tooltip);
+      })
+      .on('mousemove', ev => placeTooltip(ev, wrap, tooltip))
+      .on('mouseout', (ev, d) => {
+        linkEl.filter(l => l === d).classed('graph-edge-active', false);
+        tooltip.style('opacity', 0);
+      });
+
+    // nodes
+    const nodeEl = svg.append('g').attr('class', 'g-nodes')
+      .selectAll('g').data(nodes).join('g')
+      .attr('class', 'graph-node')
+      .call(d3.drag()
+        .on('start', (ev, d) => { if (!ev.active) sim.alphaTarget(0.3).restart(); d.fx = d.x; d.fy = d.y; })
+        .on('drag',  (ev, d) => { d.fx = ev.x; d.fy = ev.y; })
+        .on('end',   (ev, d) => { if (!ev.active) sim.alphaTarget(0); d.fx = null; d.fy = null; })
+      );
+
+    nodeEl.append('circle').attr('r', R)
+      .attr('class', d => 'graph-circle' + (d.active ? ' graph-circle-active' : ''));
+
+    nodeEl.append('text').attr('class', 'graph-label').attr('text-anchor', 'middle').attr('dy', R + 15)
+      .text(d => d.label);
+
+    nodeEl.append('text').attr('class', 'graph-sub').attr('text-anchor', 'middle').attr('dy', R + 28)
+      .text(d => d.sub);
+
+    sim.on('tick', () => {
+      // clamp nodes within the SVG bounds
+      nodes.forEach(d => {
+        d.x = Math.max(92, Math.min(W - 92, d.x));
+        d.y = Math.max(R + 10, Math.min(H - R - 35, d.y));
+      });
+      const setEdge = sel => sel
+        .attr('x1', d => d.source.x).attr('y1', d => d.source.y)
+        .attr('x2', d => d.target.x).attr('y2', d => d.target.y);
+      setEdge(linkEl);
+      setEdge(hitEl);
+      nodeEl.attr('transform', d => `translate(${d.x},${d.y})`);
+    });
+  }
+
+  function placeTooltip(ev, wrap, tooltip) {
+    const r = wrap.getBoundingClientRect();
+    let x = ev.clientX - r.left + 14;
+    let y = ev.clientY - r.top + 14;
+    const n = tooltip.node();
+    if (n) {
+      const tw = n.offsetWidth || 240;
+      const th = n.offsetHeight || 80;
+      if (x + tw > wrap.offsetWidth - 8) x -= tw + 28;
+      if (y + th > wrap.offsetHeight - 8) y -= th + 28;
+    }
+    tooltip.style('left', x + 'px').style('top', y + 'px');
+  }
+
+  return { init };
+})();
+
+
 // ---------- contact form ----------
 
 const ContactForm = (() => {
@@ -555,4 +689,5 @@ document.addEventListener('DOMContentLoaded', () => {
   Projects.init();
   FeaturedProject.init();
   Blog.init();
+  GraphViz.init();
 });
