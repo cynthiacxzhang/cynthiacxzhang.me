@@ -591,7 +591,7 @@ const GraphViz = (() => {
     if (!wrap || typeof d3 === 'undefined') return;
 
     const W = document.documentElement.clientWidth;
-    const H = 900;
+    const H = 600;
     const R = 26;
 
     // clone so D3 can mutate freely
