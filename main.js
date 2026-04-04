@@ -617,6 +617,7 @@ const GraphViz = (() => {
     const linkDist = isMobile ? 110 : 260;
     const charge = isMobile ? -280 : -700;
     const collide = R + 10;
+    const xPad = R + 20;
 
   // seed initial positions spread across the SVG so nodes don't all spawn at center
   const initPos = {
