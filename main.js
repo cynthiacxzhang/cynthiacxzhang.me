@@ -628,208 +628,200 @@ const GraphViz = (() => {
 
     const linkDist = isMobile ? 110 : 260;
     const charge = isMobile ? -280 : -700;
-    const collide = isMobile ? 50 : 90;
-    const xPad = isMobile ? 60 : 110;
 
-    // update hint text for touch devices
-    if (isMobile) {
-      const hint = document.querySelector('.graph-hint');
-      if (hint) hint.textContent = 'tap nodes to explore';
-    }
+  // seed initial positions spread across the SVG so nodes don't all spawn at center
+  const initPos = {
+    gym: [0.18, 0.15], mun: [0.12, 0.50],
+    uw: [0.45, 0.22], rbc: [0.22, 0.78],
+    trust: [0.72, 0.32], ipc: [0.82, 0.65],
+    ws: [0.52, 0.82],
+  };
+  const nodes = NODES.map(n => ({
+    ...n,
+    x: W * (initPos[n.id]?.[0] ?? 0.5),
+    y: H * (initPos[n.id]?.[1] ?? 0.5),
+  }));
+  const links = LINKS.map(l => ({ ...l }));
 
-    // seed initial positions spread across the SVG so nodes don't all spawn at center
-    const initPos = {
-      gym: [0.18, 0.15], mun: [0.12, 0.50],
-      uw: [0.45, 0.22], rbc: [0.22, 0.78],
-      trust: [0.72, 0.32], ipc: [0.82, 0.65],
-      ws: [0.52, 0.82],
-    };
-    const nodes = NODES.map(n => ({
-      ...n,
-      x: W * (initPos[n.id]?.[0] ?? 0.5),
-      y: H * (initPos[n.id]?.[1] ?? 0.5),
-    }));
-    const links = LINKS.map(l => ({ ...l }));
+  const svg = d3.select(wrap).append('svg')
+    .attr('width', '100%')
+    .attr('viewBox', `0 0 ${W} ${H}`)
+    .attr('preserveAspectRatio', 'xMidYMid meet');
 
-    const svg = d3.select(wrap).append('svg')
-      .attr('width', '100%')
-      .attr('viewBox', `0 0 ${W} ${H}`)
-      .attr('preserveAspectRatio', 'xMidYMid meet');
+  const sim = d3.forceSimulation(nodes)
+    .force('link', d3.forceLink(links).id(d => d.id).distance(linkDist).strength(0.5))
+    .force('charge', d3.forceManyBody().strength(charge))
+    .force('center', d3.forceCenter(W / 2, H / 2))
+    .force('collide', d3.forceCollide(collide))
+    .alphaDecay(0.015);
 
-    const sim = d3.forceSimulation(nodes)
-      .force('link', d3.forceLink(links).id(d => d.id).distance(linkDist).strength(0.5))
-      .force('charge', d3.forceManyBody().strength(charge))
-      .force('center', d3.forceCenter(W / 2, H / 2))
-      .force('collide', d3.forceCollide(collide))
-      .alphaDecay(0.015);
+  _svgEl = svg.node();
 
-    _svgEl = svg.node();
-
-    // transparent background rect — clicking empty graph area closes the panel
-    svg.append('rect').attr('width', W).attr('height', H)
-      .attr('fill', 'transparent')
-      .style('cursor', 'default')
-      .on('click', () => {
-        _nodeEl.selectAll('circle').classed('graph-circle-selected', false);
-        hidePanel();
-      });
-
-    const tooltip = d3.select(wrap).append('div')
-      .attr('class', 'graph-tooltip')
-      .style('opacity', 0);
-
-    // visual edges
-    const linkEl = svg.append('g').attr('class', 'g-links')
-      .selectAll('line').data(links).join('line')
-      .attr('class', 'graph-edge');
-
-    // wide invisible hit area for easy hovering
-    const hitEl = svg.append('g').attr('class', 'g-hits')
-      .selectAll('line').data(links).join('line')
-      .attr('class', 'graph-edge-hit')
-      .on('mouseover', (ev, d) => {
-        linkEl.filter(l => l === d).classed('graph-edge-active', true);
-        tooltip.style('opacity', 1)
-          .html(`<div class="gt-conn">${d.source.label} → ${d.target.label}</div><div class="gt-story">${d.story}</div>`);
-        placeTooltip(ev, wrap, tooltip);
-      })
-      .on('mousemove', ev => placeTooltip(ev, wrap, tooltip))
-      .on('mouseout', (ev, d) => {
-        linkEl.filter(l => l === d).classed('graph-edge-active', false);
-        tooltip.style('opacity', 0);
-      });
-
-    // nodes
-    const nodeEl = _nodeEl = svg.append('g').attr('class', 'g-nodes')
-      .selectAll('g').data(nodes).join('g')
-      .attr('class', 'graph-node')
-      .call(d3.drag()
-        .on('start', (ev, d) => { if (!ev.active) sim.alphaTarget(0.3).restart(); d.fx = d.x; d.fy = d.y; })
-        .on('drag', (ev, d) => { d.fx = ev.x; d.fy = ev.y; })
-        .on('end', (ev, d) => { if (!ev.active) sim.alphaTarget(0); d.fx = null; d.fy = null; })
-      )
-      .on('click', (ev, d) => {
-        ev.stopPropagation();
-        const circle = d3.select(ev.currentTarget).select('circle');
-        const wasSelected = circle.classed('graph-circle-selected');
-        nodeEl.selectAll('circle').classed('graph-circle-selected', false);
-        if (wasSelected) {
-          hidePanel();
-        } else {
-          circle.classed('graph-circle-selected', true);
-          showPanel(d);
-        }
-      });
-
-    nodeEl.append('circle').attr('r', R)
-      .attr('class', d => 'graph-circle' + (d.active ? ' graph-circle-active' : ''));
-
-    nodeEl.append('text').attr('class', 'graph-label').attr('text-anchor', 'middle').attr('dy', R + 20)
-      .text(d => d.label);
-
-    nodeEl.append('text').attr('class', 'graph-sub').attr('text-anchor', 'middle').attr('dy', R + 36)
-      .text(d => d.sub);
-
-    sim.on('tick', () => {
-      nodes.forEach(d => {
-        d.x = Math.max(xPad, Math.min(W - xPad, d.x));
-        d.y = Math.max(R + 8, Math.min(H - R - 8, d.y));
-      });
-      const setEdge = sel => sel
-        .attr('x1', d => d.source.x).attr('y1', d => d.source.y)
-        .attr('x2', d => d.target.x).attr('y2', d => d.target.y);
-      setEdge(linkEl);
-      setEdge(hitEl);
-      nodeEl.attr('transform', d => `translate(${d.x},${d.y})`);
+  // transparent background rect — clicking empty graph area closes the panel
+  svg.append('rect').attr('width', W).attr('height', H)
+    .attr('fill', 'transparent')
+    .style('cursor', 'default')
+    .on('click', () => {
+      _nodeEl.selectAll('circle').classed('graph-circle-selected', false);
+      hidePanel();
     });
 
-    // close panel when clicking outside graph or panel
-    document.addEventListener('click', ev => {
-      if (!ev.target.closest('#story-graph') && !ev.target.closest('#node-panel')) {
-        nodeEl.selectAll('circle').classed('graph-circle-selected', false);
+  const tooltip = d3.select(wrap).append('div')
+    .attr('class', 'graph-tooltip')
+    .style('opacity', 0);
+
+  // visual edges
+  const linkEl = svg.append('g').attr('class', 'g-links')
+    .selectAll('line').data(links).join('line')
+    .attr('class', 'graph-edge');
+
+  // wide invisible hit area for easy hovering
+  const hitEl = svg.append('g').attr('class', 'g-hits')
+    .selectAll('line').data(links).join('line')
+    .attr('class', 'graph-edge-hit')
+    .on('mouseover', (ev, d) => {
+      linkEl.filter(l => l === d).classed('graph-edge-active', true);
+      tooltip.style('opacity', 1)
+        .html(`<div class="gt-conn">${d.source.label} → ${d.target.label}</div><div class="gt-story">${d.story}</div>`);
+      placeTooltip(ev, wrap, tooltip);
+    })
+    .on('mousemove', ev => placeTooltip(ev, wrap, tooltip))
+    .on('mouseout', (ev, d) => {
+      linkEl.filter(l => l === d).classed('graph-edge-active', false);
+      tooltip.style('opacity', 0);
+    });
+
+  // nodes
+  const nodeEl = _nodeEl = svg.append('g').attr('class', 'g-nodes')
+    .selectAll('g').data(nodes).join('g')
+    .attr('class', 'graph-node')
+    .call(d3.drag()
+      .on('start', (ev, d) => { if (!ev.active) sim.alphaTarget(0.3).restart(); d.fx = d.x; d.fy = d.y; })
+      .on('drag', (ev, d) => { d.fx = ev.x; d.fy = ev.y; })
+      .on('end', (ev, d) => { if (!ev.active) sim.alphaTarget(0); d.fx = null; d.fy = null; })
+    )
+    .on('click', (ev, d) => {
+      ev.stopPropagation();
+      const circle = d3.select(ev.currentTarget).select('circle');
+      const wasSelected = circle.classed('graph-circle-selected');
+      nodeEl.selectAll('circle').classed('graph-circle-selected', false);
+      if (wasSelected) {
         hidePanel();
+      } else {
+        circle.classed('graph-circle-selected', true);
+        showPanel(d);
       }
     });
 
-    const closeBtn = document.querySelector('.node-panel-close');
-    if (closeBtn) {
-      closeBtn.addEventListener('click', () => {
-        nodeEl.selectAll('circle').classed('graph-circle-selected', false);
-        hidePanel();
-      });
+  nodeEl.append('circle').attr('r', R)
+    .attr('class', d => 'graph-circle' + (d.active ? ' graph-circle-active' : ''));
+
+  nodeEl.append('text').attr('class', 'graph-label').attr('text-anchor', 'middle').attr('dy', R + 20)
+    .text(d => d.label);
+
+  nodeEl.append('text').attr('class', 'graph-sub').attr('text-anchor', 'middle').attr('dy', R + 36)
+    .text(d => d.sub);
+
+  sim.on('tick', () => {
+    nodes.forEach(d => {
+      d.x = Math.max(xPad, Math.min(W - xPad, d.x));
+      d.y = Math.max(R + 8, Math.min(H - R - 8, d.y));
+    });
+    const setEdge = sel => sel
+      .attr('x1', d => d.source.x).attr('y1', d => d.source.y)
+      .attr('x2', d => d.target.x).attr('y2', d => d.target.y);
+    setEdge(linkEl);
+    setEdge(hitEl);
+    nodeEl.attr('transform', d => `translate(${d.x},${d.y})`);
+  });
+
+  // close panel when clicking outside graph or panel
+  document.addEventListener('click', ev => {
+    if (!ev.target.closest('#story-graph') && !ev.target.closest('#node-panel')) {
+      nodeEl.selectAll('circle').classed('graph-circle-selected', false);
+      hidePanel();
     }
+  });
+
+  const closeBtn = document.querySelector('.node-panel-close');
+  if (closeBtn) {
+    closeBtn.addEventListener('click', () => {
+      nodeEl.selectAll('circle').classed('graph-circle-selected', false);
+      hidePanel();
+    });
   }
+}
 
   function showPanel(d) {
-    const panel = document.getElementById('node-panel');
-    if (!panel || !_svgEl || !_wrap) return;
+  const panel = document.getElementById('node-panel');
+  if (!panel || !_svgEl || !_wrap) return;
 
-    panel.querySelector('.node-panel-title').textContent = d.panelTitle;
-    panel.querySelector('.node-panel-dates').textContent = d.panelDates;
-    let html = d.content ? `<p>${d.content}</p>` : '';
-    if (d.links && d.links.length) {
-      html += `<ul class="story-links">${d.links.map(l =>
-        `<li><a href="${l.href}" target="_blank" rel="noopener">${l.text}</a></li>`
-      ).join('')}</ul>`;
-    }
-    panel.querySelector('.node-panel-body').innerHTML = html;
-    if (window.innerWidth < 640) {
-      panel.style.left = '';
-      panel.style.top = '';
-    }
-    panel.classList.add('open');
-    positionPanel(d, panel);
+  panel.querySelector('.node-panel-title').textContent = d.panelTitle;
+  panel.querySelector('.node-panel-dates').textContent = d.panelDates;
+  let html = d.content ? `<p>${d.content}</p>` : '';
+  if (d.links && d.links.length) {
+    html += `<ul class="story-links">${d.links.map(l =>
+      `<li><a href="${l.href}" target="_blank" rel="noopener">${l.text}</a></li>`
+    ).join('')}</ul>`;
   }
-
-  function positionPanel(d, panel) {
-    if (window.innerWidth < 640) return; // mobile: CSS fixed bottom sheet handles it
-    const svgRect = _svgEl.getBoundingClientRect();
-    const wrapRect = _wrap.getBoundingClientRect();
-    const scaleX = svgRect.width / _W;
-    const scaleY = svgRect.height / _H;
-
-    // node center relative to wrap
-    const nx = d.x * scaleX + (svgRect.left - wrapRect.left);
-    const ny = d.y * scaleY + (svgRect.top - wrapRect.top);
-
-    const panelW = panel.offsetWidth || 260;
-    const panelH = panel.offsetHeight || 160;
-    const gap = _R * scaleX + 14;
-
-    // prefer right side, fall back to left
-    let left = nx + gap;
-    if (left + panelW > _wrap.offsetWidth - 8) left = nx - gap - panelW;
-    left = Math.max(8, left);
-
-    // center vertically on node, clamp within wrap
-    let top = ny - panelH / 2;
-    top = Math.max(8, Math.min(_wrap.offsetHeight - panelH - 8, top));
-
-    panel.style.left = left + 'px';
-    panel.style.top = top + 'px';
+  panel.querySelector('.node-panel-body').innerHTML = html;
+  if (window.innerWidth < 640) {
+    panel.style.left = '';
+    panel.style.top = '';
   }
+  panel.classList.add('open');
+  positionPanel(d, panel);
+}
 
-  function hidePanel() {
-    const panel = document.getElementById('node-panel');
-    if (panel) panel.classList.remove('open');
+function positionPanel(d, panel) {
+  if (window.innerWidth < 640) return; // mobile: CSS fixed bottom sheet handles it
+  const svgRect = _svgEl.getBoundingClientRect();
+  const wrapRect = _wrap.getBoundingClientRect();
+  const scaleX = svgRect.width / _W;
+  const scaleY = svgRect.height / _H;
+
+  // node center relative to wrap
+  const nx = d.x * scaleX + (svgRect.left - wrapRect.left);
+  const ny = d.y * scaleY + (svgRect.top - wrapRect.top);
+
+  const panelW = panel.offsetWidth || 260;
+  const panelH = panel.offsetHeight || 160;
+  const gap = _R * scaleX + 14;
+
+  // prefer right side, fall back to left
+  let left = nx + gap;
+  if (left + panelW > _wrap.offsetWidth - 8) left = nx - gap - panelW;
+  left = Math.max(8, left);
+
+  // center vertically on node, clamp within wrap
+  let top = ny - panelH / 2;
+  top = Math.max(8, Math.min(_wrap.offsetHeight - panelH - 8, top));
+
+  panel.style.left = left + 'px';
+  panel.style.top = top + 'px';
+}
+
+function hidePanel() {
+  const panel = document.getElementById('node-panel');
+  if (panel) panel.classList.remove('open');
+}
+
+function placeTooltip(ev, wrap, tooltip) {
+  const r = wrap.getBoundingClientRect();
+  let x = ev.clientX - r.left + 14;
+  let y = ev.clientY - r.top + 14;
+  const n = tooltip.node();
+  if (n) {
+    const tw = n.offsetWidth || 240;
+    const th = n.offsetHeight || 80;
+    if (x + tw > wrap.offsetWidth - 8) x -= tw + 28;
+    if (y + th > wrap.offsetHeight - 8) y -= th + 28;
   }
+  tooltip.style('left', x + 'px').style('top', y + 'px');
+}
 
-  function placeTooltip(ev, wrap, tooltip) {
-    const r = wrap.getBoundingClientRect();
-    let x = ev.clientX - r.left + 14;
-    let y = ev.clientY - r.top + 14;
-    const n = tooltip.node();
-    if (n) {
-      const tw = n.offsetWidth || 240;
-      const th = n.offsetHeight || 80;
-      if (x + tw > wrap.offsetWidth - 8) x -= tw + 28;
-      if (y + th > wrap.offsetHeight - 8) y -= th + 28;
-    }
-    tooltip.style('left', x + 'px').style('top', y + 'px');
-  }
-
-  return { init };
-})();
+return { init };
+}) ();
 
 
 // ---------- sidebar nav ----------
