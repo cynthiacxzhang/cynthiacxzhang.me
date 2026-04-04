@@ -614,7 +614,7 @@ const GraphViz = (() => {
     const wrap = _wrap;
     const isMobile = window.innerWidth < 640;
     _W = wrap.clientWidth;
-    _H = isMobile ? Math.max(380, window.innerHeight * 0.55) : Math.max(600, window.innerHeight * 0.75);
+    _H = isMobile ? Math.max(340, window.innerHeight * 0.50) : Math.max(480, window.innerHeight * 0.60);
     _R = isMobile ? 18 : 30;
     const W = _W, H = _H, R = _R;
 
@@ -625,10 +625,10 @@ const GraphViz = (() => {
 
   // seed initial positions spread across the SVG so nodes don't all spawn at center
   const initPos = {
-    gym: [0.18, 0.15], mun: [0.12, 0.50],
-    uw: [0.45, 0.22], rbc: [0.22, 0.78],
-    trust: [0.72, 0.32], ipc: [0.82, 0.65],
-    ws: [0.52, 0.82],
+    gym: [0.10, 0.25], mun: [0.10, 0.70],
+    uw: [0.45, 0.40], rbc: [0.22, 0.82],
+    trust: [0.78, 0.28], ipc: [0.88, 0.68],
+    ws: [0.55, 0.82],
   };
   const nodes = NODES.map(n => ({
     ...n,
