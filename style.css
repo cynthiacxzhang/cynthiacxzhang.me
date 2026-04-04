@@ -1017,7 +1017,8 @@ footer span {
 .story-graph-wrap {
   position: relative;
   width: 100%;
-  margin-bottom: 4px;
+  max-width: 780px;
+  margin: 0 auto 4px;
 }
 
 .story-graph-wrap svg {

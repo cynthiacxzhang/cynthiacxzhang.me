@@ -559,6 +559,10 @@ const GraphViz = (() => {
 
   const LINKS = [
     {
+      source: 'gym', target: 'mun',
+      story: 'Gymnastics and Model UN gave me my closest communities and longest friendships.'
+    },
+    {
       source: 'gym', target: 'uw',
       story: 'Twelve years of elite athletics made the pace of engineering feel familiar. I still find time to revisit my old routines in the university studios — old habits die hard.'
     },
