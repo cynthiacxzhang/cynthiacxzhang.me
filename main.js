@@ -510,26 +510,26 @@ const Blog = (() => {
 const GraphViz = (() => {
   const NODES = [
     {
-      id: 'gym', label: 'National Team', sub: '2010-2022', active: false,
-      panelTitle: 'Canadian National Team',
-      panelDates: 'Rhythmic Gymnastics · 2010-2022',
-      content: '12 years on the Canadian senior national team. Discipline, iterative improvement, and performing under pressure — the kind of training that doesn\'t have a defined endpoint.',
+      id: 'gym', label: 'Rhythmic Gymnastics', sub: '2012–2022 (athlete)', active: false,
+      panelTitle: 'Rhythmic Gymnastics',
+      panelDates: 'Canadian National Team · Kanata RSG · 2012–2022 (athlete)',
+      content: '2013 · Ontario Provincial Championships, AA Gold<br>2017 · Canadian National Championships AA — Silver, Pre-Junior<br>2017 · France Dany Cup AA — Bronze, International Pre-Junior<br>2019 · Canadian National Championships AA — 6th, Junior HP<br>2022 · Elite Canada Championships AA — 5th, Senior HP<br>2022 · Canadian National Championships AA — 10th<br><br>2018–2020 · Junior Canadian National Team, Rank 6<br>2020–2022 · Senior Canadian National Team, Rank 6<br><br>2022 · Ottawa Sports Award, Athlete of the Year — Rhythmic Gymnastics<br>2023 · NCCP Foundations & Competition 1, certified coach',
       links: [
         { href: 'https://youtu.be/RSqaEIa58dQ?t=9', text: '↗ competition in greece (video)' },
         { href: 'https://ottawasportspages.ca/2018/04/13/kanata-gymnasts-find-rhythm-abroad/', text: '↗ kanata gymnasts find rhythm abroad (2018)' },
       ],
     },
     {
-      id: 'mun', label: 'Model UN', sub: '2016–2022', active: false,
-      panelTitle: 'Where It Started',
-      panelDates: 'Model UN · 2016–2022',
-      content: 'I never planned to be an engineer. For six years, I led my high school\'s Model UN team, where I spent a lot of time working on technology-related proposals for the UN General Assembly. The problems were often clear, but I kept running into the same frustration: I could explain what needed to happen, but I didn\'t yet have the tools to build it myself. That gap is what pulled me toward computer engineering.',
+      id: 'mun', label: 'Model UN', sub: '2019–2023', active: false,
+      panelTitle: 'Model United Nations',
+      panelDates: 'Where It Started · 2017–2023',
+      content: 'In 2017, I stood in front of 800 international delegates on the floor of the UN General Assembly in New York to present my committee\'s resolution. That moment sparked six years of building teams, running conferences, and learning to make hard problems worth solving.<br><br>2017 · Montessori MUN International Conference — Head Delegate, 6th Committee (Legal)<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Speaker, UN General Assembly (NY) · 800 international delegates<br>2019 · Merivale HS Model UN Club — Founder and President<br>2019 · BestDelegate MUN Institute — Ambassador Certificate<br>2019 · Montessori MUN — Mentor and Chair<br>2020 · BestDelegate MUN Institute — Security Council (Crisis) Certificate<br>2021 · Host and Chair, 1st Merivale Interscholastic MUN Conference<br>2022 · BestDelegate MUN Institute — General Assembly Chair Certificate<br>2023 · Merivale Model UN — Organizational Establishment<br><br>2017–2019 · Montessori Model UN, Head Delegate<br>2019–2023 · Merivale HS Model UN Club, President',
     },
     {
-      id: 'uw', label: 'U of Waterloo', sub: '2022-now', active: true,
+      id: 'uw', label: 'UWaterloo', sub: '2023–now', active: true,
       panelTitle: 'University of Waterloo',
-      panelDates: 'Computer Engineering · 2022-now',
-      content: 'Over my 3 years in university, I realized I was interested in more than just building systems. I wanted to understand what those systems were actually doing, especially when they were meant to model human intelligence. That led me to double minor in psychology and cognitive science, where I started thinking more seriously about how intelligence works in humans and how it gets represented in machines.',
+      panelDates: 'Computer Engineering (major) · Cognitive Science & Psychology (minors) · 2023–now',
+      content: 'I came into engineering at the height of the AI/ML wave. The most interesting unsolved problem wasn\'t technical — it was human: we\'re building systems that model cognition without deeply understanding it. That\'s what pulled me toward cognitive science and psychology alongside computer engineering.',
     },
     {
       id: 'rbc', label: 'RBC Borealis', sub: '2023', active: false,
@@ -559,32 +559,24 @@ const GraphViz = (() => {
 
   const LINKS = [
     {
-      source: 'gym', target: 'mun',
-      story: '12 years competing under pressure made sustained leadership feel natural. The same discipline that held a routine together held a delegation together.'
-    },
-    {
       source: 'gym', target: 'uw',
-      story: 'Iterative improvement without a defined endpoint — training and engineering share the same loop.'
+      story: 'Twelve years of elite athletics made the pace of engineering feel familiar. I still find time to revisit my old routines in the university studios — old habits die hard.'
     },
     {
       source: 'mun', target: 'uw',
-      story: 'Six years explaining what technology should do without being able to build it. The frustration became the motivation.'
+      story: 'Through six years of MUN, I understood exactly what technology should be used to solve which problems — but every idea lacked implementation. That became my drive to pursue engineering.'
     },
     {
       source: 'mun', target: 'ipc',
-      story: 'Writing technology-adjacent resolutions for the UN GA was an early lesson in how governance frameworks get made — and where they fall short.'
-    },
-    {
-      source: 'mun', target: 'trust',
-      story: 'Translating technical findings into language that moves policy started in committee rooms, not research labs.'
+      story: 'One cold-email to a UOttawa Law School professor about Model UN became my entrance to policy. Six years of debating what should be done makes you want to sit at the table where solutions are decided.'
     },
     {
       source: 'uw', target: 'rbc',
-      story: 'First contact with production ML: what does it actually take to deploy an agent in a system where a hallucination is a liability?'
+      story: 'At the height of the agentic AI rush, understanding distributed systems and ML fundamentals from the ground up made the difference between using models and actually understanding them.'
     },
     {
       source: 'uw', target: 'trust',
-      story: 'The cogsci minor sharpened the question — not just how models fail, but which groups bear the cost of those failures.'
+      story: 'The cogsci and psych minors gave me the framework to ask what engineering rarely stops to ask: who bears the consequences when these systems get it wrong?'
     },
     {
       source: 'rbc', target: 'trust',
@@ -593,10 +585,6 @@ const GraphViz = (() => {
     {
       source: 'trust', target: 'ipc',
       story: 'Research on minority group performance degradation found its audience: policymakers who needed technical failures made legible.'
-    },
-    {
-      source: 'uw', target: 'ws',
-      story: 'The technical foundation for working at the intersection of ML and financial systems.'
     },
     {
       source: 'rbc', target: 'ws',
@@ -628,6 +616,7 @@ const GraphViz = (() => {
 
     const linkDist = isMobile ? 110 : 260;
     const charge = isMobile ? -280 : -700;
+    const collide = R + 10;
 
   // seed initial positions spread across the SVG so nodes don't all spawn at center
   const initPos = {
