@@ -24,29 +24,11 @@ html {
 
 body {
   font-family: var(--font);
-  background-color: #efefef;
-  background-image: radial-gradient(circle, #d8d8d8 1px, transparent 1px);
-  background-size: 22px 22px;
-  background-attachment: fixed;
+  background-color: var(--bg);
   color: var(--text);
   font-size: 14px;
   line-height: 1.7;
   -webkit-font-smoothing: antialiased;
-}
-
-/* centered white card column behind all content */
-body::before {
-  content: '';
-  position: fixed;
-  top: 0;
-  bottom: 0;
-  left: 50%;
-  transform: translateX(-50%);
-  width: min(860px, 100%);
-  background: var(--bg);
-  box-shadow: 0 0 0 1px var(--border), 0 4px 40px rgba(0,0,0,0.06);
-  z-index: -1;
-  pointer-events: none;
 }
 
 a {
@@ -1227,7 +1209,7 @@ footer span {
   position: fixed;
   top: 50%;
   transform: translateY(-50%);
-  left: max(16px, calc(50% - 490px));
+  left: max(16px, calc(50% - 560px));
   z-index: 30;
 }
 

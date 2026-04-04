@@ -609,7 +609,7 @@ const GraphViz = (() => {
 
     const wrap = _wrap;
     const isMobile = window.innerWidth < 640;
-    _W = document.documentElement.clientWidth;
+    _W = wrap.clientWidth;
     _H = isMobile ? Math.max(380, window.innerHeight * 0.55) : Math.max(600, window.innerHeight * 0.75);
     _R = isMobile ? 18 : 30;
     const W = _W, H = _H, R = _R;
