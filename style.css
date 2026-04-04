@@ -1210,7 +1210,7 @@ footer span {
   position: fixed;
   top: 50%;
   transform: translateY(-50%);
-  left: max(16px, calc(50% - 560px));
+  right: max(16px, calc(50% - 560px));
   z-index: 30;
 }
 
