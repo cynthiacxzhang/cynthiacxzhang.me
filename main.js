@@ -510,7 +510,7 @@ const Blog = (() => {
 const GraphViz = (() => {
   const NODES = [
     {
-      id: 'gym', label: 'Athlete', sub: '2012–2022 (rsg)', active: false,
+      id: 'gym', label: 'Rhythmic\nGymnastics', sub: '2012–2022 (athlete)', active: false,
       panelTitle: 'Rhythmic Gymnastics',
       panelDates: 'Canadian National Team · Kanata RSG · 2012–2022 (athlete)',
       content: '2013 · Ontario Provincial Championships, AA Gold<br>2017 · Canadian National Championships AA — Silver, Pre-Junior<br>2017 · France Dany Cup AA — Bronze, International Pre-Junior<br>2019 · Canadian National Championships AA — 6th, Junior HP<br>2022 · Elite Canada Championships AA — 5th, Senior HP<br>2022 · Canadian National Championships AA — 10th<br><br>2018–2020 · Junior Canadian National Team, Rank 6<br>2020–2022 · Senior Canadian National Team, Rank 6<br><br>2022 · Ottawa Sports Award, Athlete of the Year — Rhythmic Gymnastics<br>2023 · NCCP Foundations & Competition 1, certified coach',
@@ -554,6 +554,12 @@ const GraphViz = (() => {
       panelTitle: 'Wealthsimple',
       panelDates: 'Data & ML · incoming',
       content: 'Incoming Data & ML internship — applying everything above at the intersection of machine learning and financial systems.',
+    },
+    {
+      id: 'berkeley', label: 'UC Berkeley', sub: 'NLP Research · 2024', active: false,
+      panelTitle: 'Gendered Semantic Analysis',
+      panelDates: 'UC Berkeley · 2024',
+      content: 'It started with a fake email — what looked like a phishing attempt had the structure of a real research opportunity. I followed up anyway, tracked down the actual professor, and cold-emailed them directly. They responded.<br><br>What followed was a collaboration on gendered semantic analysis using NLP: studying how language models encode and propagate gender bias in semantic space. The project pushed me toward academia more seriously — and made the TRuST Network\'s work on minority group performance feel immediately relevant.',
     },
   ];
 
@@ -602,6 +608,14 @@ const GraphViz = (() => {
       source: 'ipc', target: 'ws',
       story: 'Understanding the regulatory framework before building inside it.'
     },
+    {
+      source: 'berkeley', target: 'uw',
+      story: 'A cold-email to a UC Berkeley professor — following up on what turned out to be a fake outreach — confirmed the direction. The interesting problems lived in research. UWaterloo\'s cogsci and psych framework gave the NLP work a deeper grounding.',
+    },
+    {
+      source: 'berkeley', target: 'trust',
+      story: 'Gendered semantic analysis is a specific instance of the broader problem: models failing on minority groups in ways that are hard to measure and easy to ignore. That connection made the TRuST Network the obvious next step.',
+    },
   ];
 
   // shared refs so showPanel/positionPanel can access them
@@ -628,7 +642,7 @@ const GraphViz = (() => {
     gym: [0.10, 0.25], mun: [0.10, 0.70],
     uw: [0.45, 0.40], rbc: [0.22, 0.82],
     trust: [0.78, 0.28], ipc: [0.88, 0.68],
-    ws: [0.55, 0.82],
+    ws: [0.55, 0.82], berkeley: [0.62, 0.12],
   };
   const nodes = NODES.map(n => ({
     ...n,
@@ -710,8 +724,16 @@ const GraphViz = (() => {
   nodeEl.append('circle').attr('r', R)
     .attr('class', d => 'graph-circle' + (d.active ? ' graph-circle-active' : ''));
 
-  nodeEl.append('text').attr('class', 'graph-label').attr('text-anchor', 'middle').attr('dy', R + 20)
-    .text(d => d.label);
+  nodeEl.append('text').attr('class', 'graph-label').attr('text-anchor', 'middle')
+    .each(function(d) {
+      const lines = d.label.split('\n');
+      const lineH = 14;
+      const startDy = R + 20 - ((lines.length - 1) * lineH) / 2;
+      d3.select(this).selectAll('tspan').data(lines).join('tspan')
+        .attr('x', 0)
+        .attr('dy', (_, i) => i === 0 ? startDy : lineH)
+        .text(l => l);
+    });
 
   nodeEl.append('text').attr('class', 'graph-sub').attr('text-anchor', 'middle').attr('dy', R + 36)
     .text(d => d.sub);
