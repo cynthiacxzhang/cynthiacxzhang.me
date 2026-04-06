@@ -656,12 +656,21 @@ const GraphViz = (() => {
     .attr('viewBox', `0 0 ${W} ${H}`)
     .attr('preserveAspectRatio', 'xMidYMid meet');
 
+  const _t0 = performance.now();
   const sim = d3.forceSimulation(nodes)
     .force('link', d3.forceLink(links).id(d => d.id).distance(linkDist).strength(0.5))
     .force('charge', d3.forceManyBody().strength(charge))
     .force('center', d3.forceCenter(W / 2, H / 2))
     .force('collide', d3.forceCollide(collide))
-    .alphaDecay(0.015);
+    .force('wander', () => {
+      const t = (performance.now() - _t0) / 1000;
+      nodes.forEach((d, i) => {
+        d.vx += Math.sin(t * 0.4 + i * 1.7) * 0.05;
+        d.vy += Math.cos(t * 0.35 + i * 2.5) * 0.05;
+      });
+    })
+    .alphaDecay(0.015)
+    .alphaMin(0);
 
   _svgEl = svg.node();
 
