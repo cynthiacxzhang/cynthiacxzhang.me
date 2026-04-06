@@ -510,7 +510,7 @@ const Blog = (() => {
 const GraphViz = (() => {
   const NODES = [
     {
-      id: 'gym', label: 'Rhythmic Gymnastics', sub: '2012–2022 (athlete)', active: false,
+      id: 'gym', label: 'Athlete', sub: '2012–2022 (rsg)', active: false,
       panelTitle: 'Rhythmic Gymnastics',
       panelDates: 'Canadian National Team · Kanata RSG · 2012–2022 (athlete)',
       content: '2013 · Ontario Provincial Championships, AA Gold<br>2017 · Canadian National Championships AA — Silver, Pre-Junior<br>2017 · France Dany Cup AA — Bronze, International Pre-Junior<br>2019 · Canadian National Championships AA — 6th, Junior HP<br>2022 · Elite Canada Championships AA — 5th, Senior HP<br>2022 · Canadian National Championships AA — 10th<br><br>2018–2020 · Junior Canadian National Team, Rank 6<br>2020–2022 · Senior Canadian National Team, Rank 6<br><br>2022 · Ottawa Sports Award, Athlete of the Year — Rhythmic Gymnastics<br>2023 · NCCP Foundations & Competition 1, certified coach',
@@ -621,7 +621,7 @@ const GraphViz = (() => {
     const linkDist = isMobile ? 110 : 260;
     const charge = isMobile ? -280 : -700;
     const collide = R + 10;
-    const xPad = R + 20;
+    const pad = isMobile ? R + 52 : R + 24;
 
   // seed initial positions spread across the SVG so nodes don't all spawn at center
   const initPos = {
@@ -718,8 +718,10 @@ const GraphViz = (() => {
 
   sim.on('tick', () => {
     nodes.forEach(d => {
-      d.x = Math.max(xPad, Math.min(W - xPad, d.x));
-      d.y = Math.max(R + 8, Math.min(H - R - 8, d.y));
+      if (d.x < pad)     { d.x = pad;     d.vx =  Math.abs(d.vx) * 0.6; }
+      if (d.x > W - pad) { d.x = W - pad; d.vx = -Math.abs(d.vx) * 0.6; }
+      if (d.y < pad)     { d.y = pad;     d.vy =  Math.abs(d.vy) * 0.6; }
+      if (d.y > H - pad) { d.y = H - pad; d.vy = -Math.abs(d.vy) * 0.6; }
     });
     const setEdge = sel => sel
       .attr('x1', d => d.source.x).attr('y1', d => d.source.y)
