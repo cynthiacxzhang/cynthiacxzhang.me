@@ -744,7 +744,11 @@ const GraphViz = (() => {
         .text(l => l);
     });
 
-  nodeEl.append('text').attr('class', 'graph-sub').attr('text-anchor', 'middle').attr('dy', R + 36)
+  nodeEl.append('text').attr('class', 'graph-sub').attr('text-anchor', 'middle')
+    .attr('dy', d => {
+      const lines = d.label.split('\n');
+      return R + 36 + (lines.length - 1) * 7;
+    })
     .text(d => d.sub);
 
   sim.on('tick', () => {
